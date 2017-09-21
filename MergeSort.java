@@ -1,3 +1,9 @@
+/*
+  Merge sort
+  Time: O(Nlg(N))	1/2NlgN ~ NlgN
+  Space: O(N)	6NlgN
+*/
+
 import java.util.Arrays;
 
 public class MergeSort{
