@@ -259,7 +259,7 @@ class Solution:
 
 给定两个数组，编写一个函数来计算它们的交集。
 
-**示例 1:**
+**示例 1:_
 
 ```java
 输入: nums1 = [1,2,2,1], nums2 = [2,2]
@@ -303,4 +303,275 @@ class Solution:
                     d[i] -= 1
                     result.append(i)
         return result
+```
+
+### 加一
+
+给定一个由**整数**组成的**非空**数组所表示的非负整数，在该数的基础上加一。
+
+最高位数字存放在数组的首位， 数组中每个元素只存储一个数字。
+
+你可以假设除了整数 0 之外，这个整数不会以零开头。
+
+**示例 1:**
+
+```java
+输入: [1,2,3]
+输出: [1,2,4]
+解释: 输入数组表示数字 123。
+```
+
+**示例 2:**
+
+```java
+输入: [4,3,2,1]
+输出: [4,3,2,2]
+解释: 输入数组表示数字 4321。
+```
+
+**解答**：
+
+```python
+class Solution:
+    def plusOne(self, digits):
+        """
+        :type digits: List[int]
+        :rtype: List[int]
+        """
+        for i in range(len(digits) - 1, -1, -1):
+            if digits[i] < 9:
+                digits[i] += 1
+                return digits
+            digits[i] = 0
+        digits.insert(0, 1)
+        return digits
+```
+
+### 移动零
+
+给定一个数组 `nums`，编写一个函数将所有 `0` 移动到数组的末尾，同时保持非零元素的相对顺序。
+
+**示例:**
+
+```java
+输入: [0,1,0,3,12]
+输出: [1,3,12,0,0]
+```
+
+**说明:**
+
+1. 必须在原数组上操作，不能拷贝额外的数组。
+2. 尽量减少操作次数。
+
+**解答**：
+
+```python
+class Solution:
+    def moveZeroes(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: void Do not return anything, modify nums in-place instead.
+        """
+        i = 0
+        for j in range(len(nums)):
+            if nums[j] != 0:
+                nums[i], nums[j] = nums[j], nums[i]
+                i += 1
+```
+
+### 两数之和
+
+给定一个整数数组 `nums` 和一个目标值 `target`，请你在该数组中找出和为目标值的那**两个**整数，并返回他们的数组下标。
+
+你可以假设每种输入只会对应一个答案。但是，你不能重复利用这个数组中同样的元素。
+
+**示例:**
+
+```java
+给定 nums = [2, 7, 11, 15], target = 9
+
+因为 nums[0] + nums[1] = 2 + 7 = 9
+所以返回 [0, 1]
+```
+
+**解答**：
+
+```python
+class Solution:
+    def twoSum(self, nums, target):
+        """
+        :type nums: List[int]
+        :type target: int
+        :rtype: List[int]
+        """
+        d = {}
+        for i in range(len(nums)):
+            r = target - nums[i]
+            if r in d:
+                return d[r], i
+            d[nums[i]] = i
+        return "No two sum solution"
+```
+
+### 有效的数独
+
+判断一个 9x9 的数独是否有效。只需要**根据以下规则**，验证已经填入的数字是否有效即可。
+
+1. 数字 `1-9` 在每一行只能出现一次。
+2. 数字 `1-9` 在每一列只能出现一次。
+3. 数字 `1-9` 在每一个以粗实线分隔的 `3x3` 宫内只能出现一次。
+
+![Sudoku](./resources/Sudoku.png)
+
+上图是一个部分填充的有效的数独。
+
+数独部分空格内已填入了数字，空白格用 `'.'` 表示。
+
+**示例 1:**
+
+```java
+输入:
+[
+  ["5","3",".",".","7",".",".",".","."],
+  ["6",".",".","1","9","5",".",".","."],
+  [".","9","8",".",".",".",".","6","."],
+  ["8",".",".",".","6",".",".",".","3"],
+  ["4",".",".","8",".","3",".",".","1"],
+  ["7",".",".",".","2",".",".",".","6"],
+  [".","6",".",".",".",".","2","8","."],
+  [".",".",".","4","1","9",".",".","5"],
+  [".",".",".",".","8",".",".","7","9"]
+]
+输出: true
+```
+
+**示例 2:**
+
+```java
+输入:
+[
+  ["8","3",".",".","7",".",".",".","."],
+  ["6",".",".","1","9","5",".",".","."],
+  [".","9","8",".",".",".",".","6","."],
+  ["8",".",".",".","6",".",".",".","3"],
+  ["4",".",".","8",".","3",".",".","1"],
+  ["7",".",".",".","2",".",".",".","6"],
+  [".","6",".",".",".",".","2","8","."],
+  [".",".",".","4","1","9",".",".","5"],
+  [".",".",".",".","8",".",".","7","9"]
+]
+输出: false
+解释: 除了第一行的第一个数字从 5 改为 8 以外，空格内其他数字均与 示例1 相同。
+     但由于位于左上角的 3x3 宫内有两个 8 存在, 因此这个数独是无效的。
+```
+
+**说明:**
+
+* 一个有效的数独（部分已被填充）不一定是可解的。
+* 只需要根据以上规则，验证已经填入的数字是否有效即可。
+* 给定数独序列只包含数字 `1-9` 和字符 `'.'` 。
+* 给定数独永远是 `9x9` 形式的。
+
+**解答**：
+
+```python
+class Solution:
+    def isValidSudoku(self, board):
+        """
+        :type board: List[List[str]]
+        :rtype: bool
+        """
+        row = set()
+        col = set()
+        sqr = set()
+        for i in range(9):
+            row.clear()
+            col.clear()
+            sqr.clear()
+            for j in range(9):
+                m = 3 * (i // 3) + j // 3
+                n = 3 * (i % 3) +j % 3
+                if (not self.check(row, board[i][j]) or
+                    not self.check(col, board[j][i]) or
+                    not self.check(sqr, board[m][n])):
+                    return False
+        return True
+
+    def check(self, iset, num):
+        if num != '.':
+            try:
+                iset.remove(num)
+                return False
+            except:
+                iset.add(num)
+        return True
+```
+
+### 旋转图像
+
+给定一个 n × n 的二维矩阵表示一个图像。
+
+将图像顺时针旋转 90 度。
+
+说明：
+
+你必须在**原地**旋转图像，这意味着你需要直接修改输入的二维矩阵。**请不要**使用另一个矩阵来旋转图像。
+
+**示例 1:**
+
+```java
+给定 matrix =
+[
+  [1,2,3],
+  [4,5,6],
+  [7,8,9]
+],
+
+原地旋转输入矩阵，使其变为:
+[
+  [7,4,1],
+  [8,5,2],
+  [9,6,3]
+]
+```
+
+**示例 2:**
+
+```java
+给定 matrix =
+[
+  [ 5, 1, 9,11],
+  [ 2, 4, 8,10],
+  [13, 3, 6, 7],
+  [15,14,12,16]
+],
+
+原地旋转输入矩阵，使其变为:
+[
+  [15,13, 2, 5],
+  [14, 3, 4, 1],
+  [12, 6, 8, 9],
+  [16, 7,10,11]
+]
+```
+
+**解答**：
+
+```python
+class Solution:
+    def rotate(self, matrix):
+        """
+        :type matrix: List[List[int]]
+        :rtype: void Do not return anything, modify matrix in-place instead.
+        """
+        n = len(matrix)
+        for i in range(n):
+            for j in range(i+1, n):
+                matrix[i][j], matrix[j][i] = matrix[j][i], matrix[i][j]
+            start = 0
+            end = n - 1
+            while start < end:
+                matrix[i][start], matrix[i][end] = matrix[i][end], matrix[i][start]
+                start += 1
+                end -= 1
 ```
