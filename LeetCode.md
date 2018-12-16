@@ -1023,7 +1023,7 @@ class Solution:
         :type strs: List[str]
         :rtype: str
         """
-        if strs is None or len(strs) == 0:
+        if strs == None or len(strs) == 0:
             return ''
         for i in range(len(strs[0])):
             for j in range(1, len(strs)):
@@ -1070,8 +1070,281 @@ class Solution:
 **解答**：
 
 ```python
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.next = None
 
+class Solution:
+    def deleteNode(self, node):
+        """
+        :type node: ListNode
+        :rtype: void Do not return anything, modify node in-place instead.
+        """
+        node.val = node.next.val
+        node.next = node.next.next
 ```
+
+### 删除链表的倒数第N个节点
+
+给定一个链表，删除链表的倒数第 n 个节点，并且返回链表的头结点。
+
+**示例**：
+
+```java
+给定一个链表: 1->2->3->4->5, 和 n = 2.
+
+当删除了倒数第二个节点后，链表变为 1->2->3->5.
+```
+
+**说明**：
+
+给定的 n 保证是有效的。
+
+**进阶**：
+
+你能尝试使用一趟扫描实现吗？
+
+**解答**：
+
+```python
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.next = None
+
+class Solution:
+    def removeNthFromEnd(self, head, n):
+        """
+        :type head: ListNode
+        :type n: int
+        :rtype: ListNode
+        """
+        dummy = ListNode(None)
+        dummy.next = head
+        first = dummy
+        second = dummy
+        for i in range(n + 1):
+            first = first.next
+        while first != None:
+            first = first.next
+            second = second.next
+        second.next = second.next.next
+        return dummy.next
+```
+
+### 反转链表
+
+反转一个单链表。
+
+**示例:**
+
+```java
+输入: 1->2->3->4->5->NULL
+输出: 5->4->3->2->1->NULL
+```
+
+**进阶:**
+
+你可以迭代或递归地反转链表。你能否用两种方法解决这道题？
+
+**解答**：
+
+```python
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.next = None
+
+class Solution:
+    def reverseList(self, head):
+        """
+        :type head: ListNode
+        :rtype: ListNode
+        """
+        curr = head
+        prev = None
+        while curr != None:
+            tmp = curr.next
+            curr.next = prev
+            prev = curr
+            curr = tmp
+        return prev
+```
+
+### 合并两个有序链表
+
+将两个有序链表合并为一个新的有序链表并返回。新链表是通过拼接给定的两个链表的所有节点组成的。 
+
+**示例**：
+
+```java
+输入：1->2->4, 1->3->4
+输出：1->1->2->3->4->4
+```
+
+**解答**：
+
+```python
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.next = None
+
+class Solution:
+    def mergeTwoLists(self, l1, l2):
+        """
+        :type l1: ListNode
+        :type l2: ListNode
+        :rtype: ListNode
+        """
+        result = ListNode(None)
+        t = result
+        while l1 !=  None and l2 != None:
+            if l1.val < l2.val:
+                t.next = l1
+                l1 = l1.next
+            else:
+                t.next = l2
+                l2 = l2.next
+            t = t.next
+        if l1 == None:
+            t.next = l2
+        else:
+            t.next = l1
+        return result.next
+```
+
+### 回文链表
+
+请判断一个链表是否为回文链表。
+
+**示例 1:**
+
+```java
+输入: 1->2
+输出: false
+```
+
+**示例 2:**
+
+```java
+输入: 1->2->2->1
+输出: true
+```
+
+**进阶**：
+
+你能否用 O(n) 时间复杂度和 O(1) 空间复杂度解决此题？
+
+**解答**：
+
+```python
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.next = None
+
+class Solution:
+    def isPalindrome(self, head):
+        """
+        :type head: ListNode
+        :rtype: bool
+        """
+        if head == None or head.next == None:
+            return True
+        fast = head
+        slow = head
+        while fast.next != None and fast.next.next != None:
+            fast = fast.next.next
+            slow = slow.next
+        cur = slow.next
+        slow = None
+        while cur != None:
+            t = cur.next
+            cur.next = slow
+            slow = cur
+            cur = t
+        while slow != None:
+            if slow.val != head.val:
+                return False
+            slow = slow.next
+            head = head.next
+        return True
+```
+
+### 环形链表
+
+给定一个链表，判断链表中是否有环。
+
+为了表示给定链表中的环，我们使用整数 pos 来表示链表尾连接到链表中的位置（索引从 0 开始）。 如果 pos 是 -1，则在该链表中没有环。
+
+**示例 1**：
+
+```java
+输入：head = [3,2,0,-4], pos = 1
+输出：true
+解释：链表中有一个环，其尾部连接到第二个节点。
+```
+
+![circularlinkedlist](./resources/circularlinkedlist.png)
+
+**示例 2**：
+
+```java
+输入：head = [1,2], pos = 0
+输出：true
+解释：链表中有一个环，其尾部连接到第一个节点。
+```
+
+![circularlinkedlist2](./resources/circularlinkedlist_test2.png)
+
+**示例 3**：
+
+```java
+输入：head = [1], pos = -1
+输出：false
+解释：链表中没有环。
+```
+
+![circularlinkedlist3](./resources/circularlinkedlist_test3.png)
+
+**进阶**：
+
+你能用 O(1)（即，常量）内存解决此问题吗？
+
+**解答**：
+
+```python
+# Definition for singly-linked list.
+# class ListNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.next = None
+
+class Solution(object):
+    def hasCycle(self, head):
+        """
+        :type head: ListNode
+        :rtype: bool
+        """
+        if head == None or head.next == None:
+            return False
+        fast = head.next
+        slow = head
+        while fast != slow:
+            if fast.next == None or fast.next.next == None:
+                return False
+            fast = fast.next.next
+            slow = slow.next
+        return True
+```
+
 **解答**：
 
 ```python
