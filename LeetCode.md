@@ -1023,7 +1023,7 @@ class Solution:
         :type strs: List[str]
         :rtype: str
         """
-        if strs == None or len(strs) == 0:
+        if strs is None or len(strs) == 0:
             return ''
         for i in range(len(strs[0])):
             for j in range(1, len(strs)):
@@ -1128,7 +1128,7 @@ class Solution:
         second = dummy
         for i in range(n + 1):
             first = first.next
-        while first != None:
+        while first is not None:
             first = first.next
             second = second.next
         second.next = second.next.next
@@ -1167,7 +1167,7 @@ class Solution:
         """
         curr = head
         prev = None
-        while curr != None:
+        while curr is not None:
             tmp = curr.next
             curr.next = prev
             prev = curr
@@ -1204,7 +1204,7 @@ class Solution:
         """
         result = ListNode(None)
         t = result
-        while l1 !=  None and l2 != None:
+        while l1 is not  None and l2 is not None:
             if l1.val < l2.val:
                 t.next = l1
                 l1 = l1.next
@@ -1212,7 +1212,7 @@ class Solution:
                 t.next = l2
                 l2 = l2.next
             t = t.next
-        if l1 == None:
+        if l1 is None:
             t.next = l2
         else:
             t.next = l1
@@ -1256,22 +1256,22 @@ class Solution:
         :type head: ListNode
         :rtype: bool
         """
-        if head == None or head.next == None:
+        if head is None or head.next is None:
             return True
         fast = head
         slow = head
-        while fast.next != None and fast.next.next != None:
+        while fast.next is not None and fast.next.next is not None:
             fast = fast.next.next
             slow = slow.next
         cur = slow.next
         slow = None
-        while cur != None:
+        while cur is not None:
             t = cur.next
             cur.next = slow
             slow = cur
             cur = t
-        while slow != None:
-            if slow.val != head.val:
+        while slow is not None:
+            if slow.val is not head.val:
                 return False
             slow = slow.next
             head = head.next
@@ -1333,16 +1333,765 @@ class Solution(object):
         :type head: ListNode
         :rtype: bool
         """
-        if head == None or head.next == None:
+        if head is None or head.next is None:
             return False
         fast = head.next
         slow = head
         while fast != slow:
-            if fast.next == None or fast.next.next == None:
+            if fast.next is None or fast.next.next is None:
                 return False
             fast = fast.next.next
             slow = slow.next
         return True
+```
+
+## 树
+
+### 二叉树的最大深度
+
+给定一个二叉树，找出其最大深度。
+
+二叉树的深度为根节点到最远叶子节点的最长路径上的节点数。
+
+**说明:** 叶子节点是指没有子节点的节点。
+
+**示例**：
+
+```java
+给定二叉树 [3,9,20,null,null,15,7]，
+
+    3
+   / \
+  9  20
+    /  \
+   15   7
+返回它的最大深度 3 。
+```
+
+**解答**：
+
+```python
+# Definition for a binary tree node.
+# class TreeNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class Solution(object):
+    '''
+    def maxDepth(self, root):
+        """
+        :type root: TreeNode
+        :rtype: int
+        """
+        if root is None:
+            return 0
+        left_height = self.maxDepth(root.left)
+        right_height = self.maxDepth(root.right)
+        return max(left_height, right_height) + 1
+    '''
+
+    def maxDepth(self, root):
+        """
+        :type root: TreeNode
+        :rtype: int
+        """ 
+        stack = []
+        if root is not None:
+            stack.append((1, root))
+
+        depth = 0
+        while stack != []:
+            current_depth, root = stack.pop()
+            if root is not None:
+                depth = max(depth, current_depth)
+                stack.append((current_depth + 1, root.left))
+                stack.append((current_depth + 1, root.right))
+
+        return depth
+```
+
+### 验证二叉搜索树
+
+给定一个二叉树，判断其是否是一个有效的二叉搜索树。
+
+假设一个二叉搜索树具有如下特征：
+
+* 节点的左子树只包含**小于**当前节点的数。
+* 节点的右子树只包含**大于**当前节点的数。
+* 所有左子树和右子树自身必须也是二叉搜索树。
+
+**示例 1:**
+
+```java
+输入:
+    2
+   / \
+  1   3
+输出: true
+```
+
+**示例 2:**
+
+```java
+输入:
+    5
+   / \
+  1   4
+     / \
+    3   6
+输出: false
+解释: 输入为: [5,1,4,null,null,3,6]。
+     根节点的值为 5 ，但是其右子节点值为 4 。
+```
+
+**解答**：
+
+```python
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class Solution:
+    '''
+    def isValidBST(self, root):
+        """
+        :type root: TreeNode
+        :rtype: bool
+        """
+        if not root:
+            return True
+
+        def isBSTHelper(node, lower_limit, upper_limit):
+            if lower_limit is not None and node.val <= lower_limit:
+                return False
+            if upper_limit is not None and upper_limit <= node.val:
+                return False
+
+            left = isBSTHelper(node.left, lower_limit, node.val) if node.left else True
+            if left:
+                right = isBSTHelper(node.right, node.val, upper_limit) if node.right else True
+                return right
+            else:
+                return False
+
+        return isBSTHelper(root, None, None)
+    '''
+
+    def isValidBST(self, root):
+        """
+        :type root: TreeNode
+        :rtype: bool
+        """
+        if not root:
+            return True
+
+        stack = [(root, None, None), ] 
+        while stack:
+            root, lower_limit, upper_limit = stack.pop()
+            if root.right:
+                if root.right.val > root.val:
+                    if upper_limit and root.right.val >= upper_limit:
+                        return False
+                    stack.append((root.right, root.val, upper_limit))
+                else:
+                    return False
+            if root.left:
+                if root.left.val < root.val:
+                    if lower_limit and root.left.val <= lower_limit:
+                        return False
+                    stack.append((root.left, lower_limit, root.val))
+                else:
+                    return False
+        return True
+```
+
+### 对称二叉树
+
+给定一个二叉树，检查它是否是镜像对称的。
+
+例如，二叉树 `[1,2,2,3,4,4,3]` 是对称的。
+
+```java
+    1
+   / \
+  2   2
+ / \ / \
+3  4 4  3
+```
+
+但是下面这个 `[1,2,2,null,3,null,3]` 则不是镜像对称的:
+
+```java
+    1
+   / \
+  2   2
+   \   \
+   3    3
+```
+
+**说明:**
+
+如果你可以运用递归和迭代两种方法解决这个问题，会很加分。
+
+**解答**：
+
+```python
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class Solution:
+    '''
+    def isSymmetric(self, root):
+        """
+        :type root: TreeNode
+        :rtype: bool
+        """
+        return self.check(root, root)
+
+    def check(self, tree_left, tree_right):
+        if tree_left is None and tree_right is None:
+            return True
+        if tree_left is None or tree_right is None:
+            return False
+        return tree_left.val == tree_right.val and self.check(tree_left.left, tree_right.right) and self.check(tree_left.right, tree_right.left)
+    '''
+
+    def isSymmetric(self, root):
+        """
+        :type root: TreeNode
+        :rtype: bool
+        """
+        stack = [(root, root)]
+        while stack:
+            t1, t2 = stack.pop()
+            if t1 is None and t2 is None:
+                continue
+            if t1 is None or t2 is None:
+                return False
+            if t1.val != t2.val:
+                return False
+            stack.append((t1.left, t2.right))
+            stack.append((t1.right, t2.left))
+        return True
+```
+
+### 二叉树的层次遍历
+
+给定一个二叉树，返回其按层次遍历的节点值。 （即逐层地，从左到右访问所有节点）。
+
+例如:
+
+给定二叉树: `[3,9,20,null,null,15,7]`,
+
+```java
+    3
+   / \
+  9  20
+    /  \
+   15   7
+```
+
+返回其层次遍历结果：
+
+```java
+[
+  [3],
+  [9,20],
+  [15,7]
+]
+```
+
+**解答**：
+
+```python
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class Solution:
+    def levelOrder(self, root):
+        """
+        :type root: TreeNode
+        :rtype: List[List[int]]
+        """
+        res = []
+        level_set = set()
+        stack = [(root, 0)]
+        while stack:
+            node, level = stack.pop()
+            if node:
+                if level not in level_set:
+                    level_set.add(level)
+                    res.append([])
+                res[level].append(node.val)
+                stack.append((node.right, level + 1))
+                stack.append((node.left, level + 1))
+        return res
+```
+
+### 将有序数组转换为二叉搜索树
+
+将一个按照升序排列的有序数组，转换为一棵高度平衡二叉搜索树。
+
+本题中，一个高度平衡二叉树是指一个二叉树每个节点 的左右两个子树的高度差的绝对值不超过 1。
+
+**示例:**
+
+```java
+给定有序数组: [-10,-3,0,5,9],
+
+一个可能的答案是：[0,-3,9,-10,null,5]，它可以表示下面这个高度平衡二叉搜索树：
+
+      0
+     / \
+   -3   9
+   /   /
+ -10  5
+```
+
+**解答**：
+
+```python
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class Solution:
+    def sortedArrayToBST(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: TreeNode
+        """
+        if not nums:
+            return None
+        mid = int(len(nums) / 2)
+        root = TreeNode(nums[mid])
+        root.left = self.sortedArrayToBST(nums[:mid])
+        root.right = self.sortedArrayToBST(nums[mid+1:])
+        return root
+```
+
+## 排序和搜索
+
+### 合并两个有序数组
+
+给定两个有序整数数组 `nums1` 和 `nums2`，将 `nums2` 合并到 `nums1` 中，使得 `num1` 成为一个有序数组。
+
+**说明:**
+
+初始化 `nums1` 和 `nums2` 的元素数量分别为 `m` 和 `n`。
+你可以假设 `nums1` 有足够的空间（空间大小大于或等于 `m + n`）来保存 `nums2` 中的元素。
+
+**示例:**
+
+```java
+输入:
+nums1 = [1,2,3,0,0,0], m = 3
+nums2 = [2,5,6],       n = 3
+
+输出: [1,2,2,3,5,6]
+```
+
+**解答**：
+
+```python
+class Solution:
+    def merge(self, nums1, m, nums2, n):
+        """
+        :type nums1: List[int]
+        :type m: int
+        :type nums2: List[int]
+        :type n: int
+        :rtype: void Do not return anything, modify nums1 in-place instead.
+        """
+        i = m - 1
+        j = n - 1
+        t = m + n -1
+        while i >= 0 and j >= 0:
+            if nums1[i] < nums2[j]:
+                nums1[t] = nums2[j]
+                j -= 1
+            else:
+                nums1[t] = nums1[i]
+                i -= 1
+            t -= 1
+        while j >= 0:
+            nums1[t] = nums2[j]
+            j -= 1
+            t -=1
+```
+
+### 第一个错误的版本
+
+你是产品经理，目前正在带领一个团队开发新的产品。不幸的是，你的产品的最新版本没有通过质量检测。由于每个版本都是基于之前的版本开发的，所以错误的版本之后的所有版本都是错的。
+
+假设你有 `n` 个版本 `[1, 2, ..., n]`，你想找出导致之后所有版本出错的第一个错误的版本。
+
+你可以通过调用 `bool isBadVersion(version)` 接口来判断版本号 `version` 是否在单元测试中出错。实现一个函数来查找第一个错误的版本。你应该尽量减少对调用 API 的次数。
+
+**示例:**
+
+```java
+给定 n = 5，并且 version = 4 是第一个错误的版本。
+
+调用 isBadVersion(3) -> false
+调用 isBadVersion(5) -> true
+调用 isBadVersion(4) -> true
+
+所以，4 是第一个错误的版本。
+```
+
+**解答**：
+
+```python
+# The isBadVersion API is already defined for you.
+# @param version, an integer
+# @return a bool
+# def isBadVersion(version):
+
+class Solution:
+    def firstBadVersion(self, n):
+        """
+        :type n: int
+        :rtype: int
+        """
+        left = 1
+        right = n
+        while left < right:
+            mid = left + int((right - left) / 2)
+            if isBadVersion(mid):
+                right = mid
+            else:
+                left = mid + 1
+        return left
+```
+
+## 动态规划
+
+### 爬楼梯
+
+假设你正在爬楼梯。需要 n 阶你才能到达楼顶。
+
+每次你可以爬 1 或 2 个台阶。你有多少种不同的方法可以爬到楼顶呢？
+
+**注意**：给定 n 是一个正整数。
+
+**示例 1**：
+
+```java
+输入： 2
+输出： 2
+解释： 有两种方法可以爬到楼顶。
+1.  1 阶 + 1 阶
+2.  2 阶
+```
+
+**示例 2**：
+
+```java
+输入： 3
+输出： 3
+解释： 有三种方法可以爬到楼顶。
+1.  1 阶 + 1 阶 + 1 阶
+2.  1 阶 + 2 阶
+3.  2 阶 + 1 阶
+```
+
+**解答**：
+
+```python
+class Solution:
+    def climbStairs(self, n):
+        """
+        :type n: int
+        :rtype: int
+        """
+        if n == 1:
+            return 1
+        first = 1
+        second = 2
+        for i in range(3, n+1):
+            third = first + second
+            first = second
+            second = third
+        return second
+```
+
+### 买卖股票的最佳时机
+
+给定一个数组，它的第 i 个元素是一支给定股票第 i 天的价格。
+
+如果你最多只允许完成一笔交易（即买入和卖出一支股票），设计一个算法来计算你所能获取的最大利润。
+
+注意你不能在买入股票前卖出股票。
+
+**示例 1:**
+
+```java
+输入: [7,1,5,3,6,4]
+输出: 5
+解释: 在第 2 天（股票价格 = 1）的时候买入，在第 5 天（股票价格 = 6）的时候卖出，最大利润 = 6-1 = 5 。
+     注意利润不能是 7-1 = 6, 因为卖出价格需要大于买入价格。
+```
+
+**示例 2:**
+
+```java
+输入: [7,6,4,3,1]
+输出: 0
+解释: 在这种情况下, 没有交易完成, 所以最大利润为 0。
+```
+
+**解答**：
+
+```python
+class Solution:
+    def maxProfit(self, prices):
+        """
+        :type prices: List[int]
+        :rtype: int
+        """
+        minprice = 999999999
+        maxprofit = 0
+        for price in prices:
+            if price < minprice:
+                minprice = price
+            elif price - minprice > maxprofit:
+                maxprofit = price - minprice
+        return maxprofit
+```
+
+### 最大子序和
+
+给定一个整数数组 `nums` ，找到一个具有最大和的连续子数组（子数组最少包含一个元素），返回其最大和。
+
+**示例:**
+
+```java
+输入: [-2,1,-3,4,-1,2,1,-5,4],
+输出: 6
+解释: 连续子数组 [4,-1,2,1] 的和最大，为 6。
+```
+
+**进阶:**
+
+如果你已经实现复杂度为 O(n) 的解法，尝试使用更为精妙的分治法求解。
+
+**解答**：
+
+```python
+class Solution:
+    def maxSubArray(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: int
+        """
+        cursum = 0
+        maxsum = nums[0]
+        for num in nums:
+            cursum = max(cursum + num, num)
+            maxsum = max(cursum, maxsum)
+        return maxsum
+```
+
+### 打家劫舍
+
+你是一个专业的小偷，计划偷窃沿街的房屋。每间房内都藏有一定的现金，影响你偷窃的唯一制约因素就是相邻的房屋装有相互连通的防盗系统，**如果两间相邻的房屋在同一晚上被小偷闯入，系统会自动报警**。
+
+给定一个代表每个房屋存放金额的非负整数数组，计算你**在不触动警报装置的情况下**，能够偷窃到的最高金额。
+
+**示例 1:**
+
+```java
+输入: [1,2,3,1]
+输出: 4
+解释: 偷窃 1 号房屋 (金额 = 1) ，然后偷窃 3 号房屋 (金额 = 3)。
+     偷窃到的最高金额 = 1 + 3 = 4 。
+```
+
+**示例 2:**
+
+```java
+输入: [2,7,9,3,1]
+输出: 12
+解释: 偷窃 1 号房屋 (金额 = 2), 偷窃 3 号房屋 (金额 = 9)，接着偷窃 5 号房屋 (金额 = 1)。
+     偷窃到的最高金额 = 2 + 9 + 1 = 12 。
+```
+
+**解答**：
+
+```python
+class Solution:
+    def rob(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: int
+        """
+        if len(nums) == 0 or nums is None:
+            return 0
+        if len(nums) == 1:
+            return nums[0]
+        result = [nums[0], max(nums[0], nums[1])]
+        for i in range(2, len(nums)):
+            result.append(max(result[i-1], result[i-2] + nums[i]))
+        return result[-1]
+```
+
+## 设计问题
+
+### 打乱数组
+
+打乱一个没有重复元素的数组。
+
+**示例:**
+
+```java
+// 以数字集合 1, 2 和 3 初始化数组。
+int[] nums = {1,2,3};
+Solution solution = new Solution(nums);
+
+// 打乱数组 [1,2,3] 并返回结果。任何 [1,2,3]的排列返回的概率应该相同。
+solution.shuffle();
+
+// 重设数组到它的初始状态[1,2,3]。
+solution.reset();
+
+// 随机返回数组[1,2,3]打乱后的结果。
+solution.shuffle();
+```
+
+**解答**：
+
+```python
+class Solution:
+
+    def __init__(self, nums):
+        """
+        :type nums: List[int]
+        """
+        self.array = nums
+        self.original = list(nums)
+
+    def reset(self):
+        """
+        Resets the array to its original configuration and return it.
+        :rtype: List[int]
+        """
+        self.array = self.original
+        self.original = list(self.original)
+        return self.array
+
+    def shuffle(self):
+        """
+        Returns a random shuffling of the array.
+        :rtype: List[int]
+        """
+        for i in range(len(self.array)):
+            swap_idx = random.randrange(i, len(self.array))
+            self.array[i], self.array[swap_idx] = self.array[swap_idx], self.array[i]
+        return self.array
+
+
+# Your Solution object will be instantiated and called as such:
+# obj = Solution(nums)
+# param_1 = obj.reset()
+# param_2 = obj.shuffle()
+```
+
+### 最小栈
+
+设计一个支持 push，pop，top 操作，并能在常数时间内检索到最小元素的栈。
+
+* push(x) -- 将元素 x 推入栈中。
+* pop() -- 删除栈顶的元素。
+* top() -- 获取栈顶元素。
+* getMin() -- 检索栈中的最小元素。
+
+**示例:**
+
+```java
+MinStack minStack = new MinStack();
+minStack.push(-2);
+minStack.push(0);
+minStack.push(-3);
+minStack.getMin();   --> 返回 -3.
+minStack.pop();
+minStack.top();      --> 返回 0.
+minStack.getMin();   --> 返回 -2.
+```
+
+**解答**：
+
+```python
+class MinStack:
+
+    def __init__(self):
+        """
+        initialize your data structure here.
+        """
+        self.minimum = 2147483647
+        self.stack = []
+
+    def push(self, x):
+        """
+        :type x: int
+        :rtype: void
+        """
+        if x <= self.minimum:
+            self.stack.append(self.minimum)
+            self.minimum = x
+        self.stack.append(x)
+
+    def pop(self):
+        """
+        :rtype: void
+        """
+        if self.stack.pop() == self.minimum:
+            self.minimum = self.stack.pop()
+
+    def top(self):
+        """
+        :rtype: int
+        """
+        return self.stack[-1]
+
+    def getMin(self):
+        """
+        :rtype: int
+        """
+        return self.minimum
+
+
+# Your MinStack object will be instantiated and called as such:
+# obj = MinStack()
+# obj.push(x)
+# obj.pop()
+# param_3 = obj.top()
+# param_4 = obj.getMin()
+```
+
+## 数学
+
+### 
+**解答**：
+
+```python
+
 ```
 
 **解答**：
@@ -1350,6 +2099,13 @@ class Solution(object):
 ```python
 
 ```
+
+**解答**：
+
+```python
+
+```
+
 **解答**：
 
 ```python
