@@ -2090,10 +2090,6 @@ class MinStack:
 ### 
 **解答**：
 
-```python
-
-```
-
 **解答**：
 
 ```python
@@ -2110,4 +2106,37 @@ class MinStack:
 
 ```python
 
+```
+
+### 最小堆实现topK
+
+```python
+def heap_adjust(A,i,size):
+    left = 2*i+1
+    right = 2*i+2
+    min_index = i
+    if(left<size and A[min_index]>A[left]):
+        min_index = left
+    if(right<size and A[min_index]>A[right]):
+        min_index = right
+    if(min_index!=i):
+        temp = A[min_index]
+        A[min_index] = A[i]
+        A[i] = temp
+        heap_adjust(A,min_index,size)
+    return A
+ 
+def build_heap(A,size):
+    for i in range(int(size/2),-1,-1):
+        heap_adjust(A,i,size)
+    return A
+ 
+ 
+arr = [1,2,3,4,5,6,7,8,9]
+b = build_heap(arr[:3],3)
+for i in range(3,len(arr)):
+    if(arr[i]>b[0]):
+        b[0] = arr[i]
+    b = heap_adjust(b,0,3)
+print(b)
 ```
