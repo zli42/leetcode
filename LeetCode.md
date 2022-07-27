@@ -97,3 +97,79 @@ impl Solution {
     }
 }
 ```
+
+# [对称二叉树](https://leetcode.cn/problems/symmetric-tree/)
+
+python
+```python
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def isSymmetric(self, root: Optional[TreeNode]) -> bool:
+        if root is None or (root.left is None and root.right is None):
+            return True
+        
+        queue = [(root.left,root.right)]
+        while queue:
+            left, right = queue.pop()
+            if left is None and right is None:
+                continue
+            if left is None or right is None:
+                return False
+            if left.val != right.val:
+                return False
+            
+            queue.append((left.left,right.right))
+            queue.append((left.right,right.left))
+        return True
+```
+
+rust
+```rust
+// Definition for a binary tree node.
+// #[derive(Debug, PartialEq, Eq)]
+// pub struct TreeNode {
+//   pub val: i32,
+//   pub left: Option<Rc<RefCell<TreeNode>>>,
+//   pub right: Option<Rc<RefCell<TreeNode>>>,
+// }
+//
+// impl TreeNode {
+//   #[inline]
+//   pub fn new(val: i32) -> Self {
+//     TreeNode {
+//       val,
+//       left: None,
+//       right: None
+//     }
+//   }
+// }
+use std::rc::Rc;
+use std::cell::RefCell;
+impl Solution {
+    pub fn is_symmetric(root: Option<Rc<RefCell<TreeNode>>>) -> bool {
+        if let Some(root) = root {
+            let mut queue = vec![(root.borrow().left.clone(), root.borrow().right.clone())];
+            while let Some((left, right)) = queue.pop() {
+                match (left, right) {
+                    (None, None) => (),
+                    (Some(left), Some(right)) => {
+                        if left.borrow().val == right.borrow().val {
+                            queue.push((left.borrow().left.clone(), right.borrow().right.clone()));
+                            queue.push((left.borrow().right.clone(), right.borrow().left.clone()));
+                        } else {
+                            return false;
+                        }
+                    },
+                    _ => return false,
+                }
+            }
+        }
+        true
+    }
+}
+```
