@@ -108,9 +108,28 @@ python
 #         self.val = val
 #         self.left = left
 #         self.right = right
+
+# DFS
 class Solution:
     def isSymmetric(self, root: Optional[TreeNode]) -> bool:
-        if root is None or (root.left is None and root.right is None):
+        if root is None:
+            return True
+
+        def dfs(left, right):
+            if left is None and right is None:
+                return True
+            if left is None or right is None:
+                return False
+            if left.val != right.val:
+                return False
+            return dfs(left.left, right.right) and dfs(left.right, right.left)
+
+        return dfs(root.left, root.right) 
+
+# BFS
+class Solution:
+    def isSymmetric(self, root: Optional[TreeNode]) -> bool:
+        if root is None:
             return True
         
         queue = [(root.left,root.right)]
@@ -122,9 +141,9 @@ class Solution:
                 return False
             if left.val != right.val:
                 return False
-            
             queue.append((left.left,right.right))
             queue.append((left.right,right.left))
+
         return True
 ```
 
@@ -150,6 +169,35 @@ rust
 // }
 use std::rc::Rc;
 use std::cell::RefCell;
+
+// DFS
+impl Solution {
+    pub fn is_symmetric(root: Option<Rc<RefCell<TreeNode>>>) -> bool {
+        fn dfs(
+            left: &Option<Rc<RefCell<TreeNode>>>,
+            right: &Option<Rc<RefCell<TreeNode>>>,
+        ) -> bool {
+            match (left, right) {
+                (None, None) => true,
+                (Some(left), Some(right)) => {
+                    if left.borrow().val != right.borrow().val {
+                        false
+                    } else {
+                        dfs(&left.borrow().left, &right.borrow().right)
+                            && dfs(&left.borrow().right, &right.borrow().left)
+                    }
+                }
+                _ => false,
+            }
+        }
+        match root {
+            None => true,
+            Some(root) => dfs(&root.borrow().left, &root.borrow().right),
+        }
+    }
+}
+
+// BFS
 impl Solution {
     pub fn is_symmetric(root: Option<Rc<RefCell<TreeNode>>>) -> bool {
         if let Some(root) = root {
@@ -170,6 +218,116 @@ impl Solution {
             }
         }
         true
+    }
+}
+```
+
+ # [二叉树的最大深度](https://leetcode.cn/problems/maximum-depth-of-binary-tree/)
+
+python
+```python
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+
+# DFS
+class Solution:
+    def maxDepth(self, root: Optional[TreeNode]) -> int:
+        if root == None:
+            return 0
+
+        leftHeight = self.maxDepth(root.left)
+        rightHeight = self.maxDepth(root.right)
+
+        return max(leftHeight, rightHeight) + 1
+
+# BFS
+class Solution:
+    def maxDepth(self, root: Optional[TreeNode]) -> int:
+        if root == None:
+            return 0
+
+        queue = [root]
+        depth = 0
+
+        while queue:
+            n = len(queue)
+            for i in range(n):
+                node = queue.pop(0)
+                if node.left:
+                    queue.append(node.left)
+                if node.right:
+                    queue.append(node.right)
+            depth += 1
+        return depth
+```
+
+rust
+```rust
+// Definition for a binary tree node.
+// #[derive(Debug, PartialEq, Eq)]
+// pub struct TreeNode {
+//   pub val: i32,
+//   pub left: Option<Rc<RefCell<TreeNode>>>,
+//   pub right: Option<Rc<RefCell<TreeNode>>>,
+// }
+//
+// impl TreeNode {
+//   #[inline]
+//   pub fn new(val: i32) -> Self {
+//     TreeNode {
+//       val,
+//       left: None,
+//       right: None
+//     }
+//   }
+// }
+use std::rc::Rc;
+use std::cell::RefCell;
+
+// DFS
+impl Solution {
+    pub fn max_depth(root: Option<Rc<RefCell<TreeNode>>>) -> i32 {
+        match root {
+            None => 0,
+            Some(root) => {
+                let leftHeight = Self::max_depth(root.borrow().left.clone());
+                let rightHeight = Self::max_depth(root.borrow().right.clone());
+                leftHeight.max(rightHeight) + 1
+            }
+        }
+    }
+}
+
+// BFS
+impl Solution {
+    pub fn max_depth(root: Option<Rc<RefCell<TreeNode>>>) -> i32 {
+        match root {
+            None => 0,
+            Some(root) => {
+                let mut queue = std::collections::VecDeque::new();
+                queue.push_back(root);
+                let mut depth = 0;
+                while !queue.is_empty() {
+                    let mut n = queue.len();
+                    for i in 0..n {
+                        if let Some(node) = queue.pop_front() {
+                            if let Some(left) = node.borrow().left.clone() {
+                                queue.push_back(left);
+                            }
+                            if let Some(right) = node.borrow().right.clone() {
+                                queue.push_back(right);
+                            }
+                        }
+                    }
+                    depth += 1;
+                }
+                depth
+            }
+        }
     }
 }
 ```
