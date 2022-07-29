@@ -396,3 +396,52 @@ impl Solution {
     }
 }
 ```
+# [两个数组的交集](https://leetcode.cn/problems/intersection-of-two-arrays-ii/)
+
+python
+```python
+class Solution:
+    def intersect(self, nums1: List[int], nums2: List[int]) -> List[int]:
+        if len(nums1) > len(nums2):
+            return self.intersect(nums2, nums1)
+        
+        m = collections.Counter()
+        for num in nums1:
+            m[num] += 1
+        
+        intersection = list()
+        for num in nums2:
+            if (count := m.get(num, 0)) > 0:
+                intersection.append(num)
+                m[num] -= 1
+        
+        return intersection
+```
+
+rust
+```rust
+impl Solution {
+    pub fn intersect(nums1: Vec<i32>, nums2: Vec<i32>) -> Vec<i32> {
+        if nums1.len() > nums2.len() {
+            return Self::intersect(nums2, nums1);
+        }
+
+        let mut map = std::collections::HashMap::new();
+        for num in nums1 {
+            let count = map.entry(num).or_insert(0);
+            *count += 1;
+        }
+
+        let mut intersection = vec![];
+        for num in nums2 {
+            if let Some(count) = map.get_mut(&num) {
+                if *count > 0 {
+                    intersection.push(num);
+                    *count -= 1;
+                }
+            }
+        }
+        intersection
+    }
+}
+```
