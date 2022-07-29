@@ -331,3 +331,68 @@ impl Solution {
     }
 }
 ```
+
+# [将有序数组转换为二叉搜索树](https://leetcode.cn/problems/convert-sorted-array-to-binary-search-tree/)
+
+python
+```python
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def sortedArrayToBST(self, nums: List[int]) -> Optional[TreeNode]:
+        def helper(left, right):
+            if left >= right:
+                return None
+
+            mid = (left + right) // 2
+
+            root = TreeNode(nums[mid])
+            root.left = helper(left, mid)
+            root.right = helper(mid + 1, right)
+            return root
+
+        return helper(0, len(nums))
+```
+
+rust
+```rust
+// Definition for a binary tree node.
+// #[derive(Debug, PartialEq, Eq)]
+// pub struct TreeNode {
+//   pub val: i32,
+//   pub left: Option<Rc<RefCell<TreeNode>>>,
+//   pub right: Option<Rc<RefCell<TreeNode>>>,
+// }
+//
+// impl TreeNode {
+//   #[inline]
+//   pub fn new(val: i32) -> Self {
+//     TreeNode {
+//       val,
+//       left: None,
+//       right: None
+//     }
+//   }
+// }
+use std::rc::Rc;
+use std::cell::RefCell;
+impl Solution {
+    pub fn sorted_array_to_bst(nums: Vec<i32>) -> Option<Rc<RefCell<TreeNode>>> {
+        fn helper(nums: &Vec<i32>, left: usize, right: usize) -> Option<Rc<RefCell<TreeNode>>> {
+            if left >= right {
+                return None;
+            }
+            let mid = (left + right) / 2;
+            let mut root = TreeNode::new(nums[mid]);
+            root.left = helper(nums, left, mid);
+            root.right = helper(nums, mid + 1, right);
+            return Some(Rc::new(RefCell::new(root)));
+        }
+        return helper(&nums, 0, nums.len());
+    }
+}
+```
