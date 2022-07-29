@@ -445,3 +445,90 @@ impl Solution {
     }
 }
 ```
+
+# [寻找重复数](https://leetcode.cn/problems/find-the-duplicate-number/)
+
+python
+```python
+# 二分
+class Solution:
+    def findDuplicate(self, nums: List[int]) -> int:
+        left, right = 0, len(nums)
+        while left < right:
+            mid = (left + right) // 2
+            # 抽屉原理
+            cnt = 0
+            for num in nums:
+                if num <= mid:
+                    cnt += 1
+            if cnt <= mid:     
+                left = mid+1
+            else:
+                right = mid
+        return left
+
+# 有环链表 快慢指针
+class Solution:
+    def findDuplicate(self, nums: List[int]) -> int:
+        slow, fast = 0, 0
+        while True:
+            slow = nums[slow]           
+            fast = nums[nums[fast]]     
+            if fast == slow:    
+                break
+        
+        slow = 0                
+        while slow != fast:     
+            slow = nums[slow]
+            fast = nums[fast]
+        
+        return slow
+```
+
+rust
+```rust
+// 二分
+impl Solution {
+    pub fn find_duplicate(nums: Vec<i32>) -> i32 {
+        let mut left = 0;
+        let mut right = nums.len();
+        while left < right {
+            let mid = (left + right) / 2;
+            let mut cnt = 0;
+            for num in &nums {
+                if *num as usize <= mid {
+                    cnt += 1;
+                }
+            }
+            if cnt <= mid {
+                left = mid + 1;
+            } else {
+                right = mid;
+            }
+        }
+        left as i32
+    }
+}
+
+// 有环链表 快慢指针
+impl Solution {
+    pub fn find_duplicate(nums: Vec<i32>) -> i32 {
+        let mut slow = 0;
+        let mut fast = 0;
+        loop {
+            slow = nums[slow] as usize;
+            fast = nums[nums[fast] as usize] as usize;
+            if fast == slow {
+                break;
+            }
+        }
+
+        slow = 0;
+        while slow != fast {
+            slow = nums[slow] as usize;
+            fast = nums[fast] as usize;
+        }
+        slow as i32
+    }
+}
+```
