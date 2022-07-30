@@ -1,3 +1,12 @@
+- [两数之和](#两数之和)
+- [二叉树的中序遍历](#二叉树的中序遍历)
+- [对称二叉树](#对称二叉树)
+- [二叉树的最大深度](#二叉树的最大深度)
+- [将有序数组转换为二叉搜索树](#将有序数组转换为二叉搜索树)
+- [两个数组的交集](#两个数组的交集)
+- [寻找重复数](#寻找重复数)
+- [三数之和](#三数之和)
+
 # [两数之和](https://leetcode.cn/problems/two-sum/)
 
 python
@@ -529,6 +538,91 @@ impl Solution {
             fast = nums[fast] as usize;
         }
         slow as i32
+    }
+}
+```
+# [三数之和](https://leetcode.cn/problems/3sum/)
+
+python
+```python
+class Solution:
+    def threeSum(self, nums: List[int]) -> List[List[int]]:
+        n = len(nums)
+        res = []
+        if not nums or n < 3:
+            return res
+
+        nums.sort()
+        for i in range(n):
+            if nums[i] > 0:
+                return res
+
+            if i > 0 and nums[i] == nums[i - 1]:
+                continue
+
+            l = i + 1
+            r = n - 1
+            while l < r:
+                s = nums[i] + nums[l] + nums[r]
+                if s == 0:
+                    res.append([nums[i], nums[l], nums[r]])
+                    l += 1
+                    while l < r and nums[l] == nums[l - 1]:
+                        l += 1
+                    r -= 1
+                    while l < r and nums[r] == nums[r + 1]:
+                        r -= 1
+                elif s > 0:
+                    r -= 1
+                else:
+                    l += 1
+        return res
+```
+
+rust
+```rust
+impl Solution {
+    pub fn three_sum(nums: Vec<i32>) -> Vec<Vec<i32>> {
+        let n = nums.len();
+        let mut res = vec![];
+        if n < 3 {
+            return res;
+        }
+        
+        let mut nums = nums;
+        nums.sort();
+        
+        for i in 0..n {
+            if nums[i] > 0 {
+                return res;
+            }
+            
+            if i > 0 && nums[i] == nums[i - 1] {
+                continue;
+            }
+
+            let mut l = i + 1;
+            let mut r = n - 1;
+            while l < r {
+                let s = nums[i] + nums[l] + nums[r];
+                if s == 0 {
+                    res.push(vec![nums[i], nums[l], nums[r]]);
+                    l += 1;
+                    while l < r && nums[l] == nums[l - 1] {
+                        l += 1;
+                    }
+                    r -= 1;
+                    while l < r && nums[r] == nums[r + 1] {
+                        r -= 1;
+                    }
+                } else if s > 0 {
+                    r -= 1;
+                } else {
+                    l += 1;
+                }
+            }
+        }
+        return res;
     }
 }
 ```
