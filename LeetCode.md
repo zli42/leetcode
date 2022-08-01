@@ -6,6 +6,7 @@
 - [两个数组的交集](#两个数组的交集)
 - [寻找重复数](#寻找重复数)
 - [三数之和](#三数之和)
+- [搜索旋转排序数组](#搜索旋转排序数组)
 
 # [两数之和](https://leetcode.cn/problems/two-sum/)
 
@@ -623,6 +624,63 @@ impl Solution {
             }
         }
         return res;
+    }
+}
+```
+
+# [搜索旋转排序数组](https://leetcode.cn/problems/search-in-rotated-sorted-array/)
+
+python
+```python
+class Solution:
+    def search(self, nums: List[int], target: int) -> int:
+        if not nums:
+            return -1
+        l, r = 0, len(nums) - 1
+        while l <= r:
+            mid = (l + r) // 2
+            if nums[mid] == target:
+                return mid
+            if nums[0] <= nums[mid]:
+                if nums[0] <= target < nums[mid]:
+                    r = mid - 1
+                else:
+                    l = mid + 1
+            else:
+                if nums[mid] < target <= nums[len(nums) - 1]:
+                    l = mid + 1
+                else:
+                    r = mid - 1
+        return -1
+```
+
+rust
+```rust
+impl Solution {
+    pub fn search(nums: Vec<i32>, target: i32) -> i32 {
+        let n = nums.len() - 1;
+        let mut l = 0;
+        let mut r = n;
+        while l <= r {
+            let mid = (l + r) / 2;
+            if nums[mid] == target {
+                return mid as i32;
+            }
+            if nums[0] <= nums[mid] {
+                if nums[0] <= target && target <= nums[mid] {
+                    r = mid - 1;
+                } else {
+                    l = mid + 1;
+                }
+            } else {
+                if nums[mid] < target && target <= nums[n] {
+                    l = mid + 1;
+                } else {
+                    r = mid - 1;
+                }
+            }
+        }
+        return -1;
     }
 }
 ```
