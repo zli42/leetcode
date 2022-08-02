@@ -8,6 +8,7 @@
 - [三数之和](#三数之和)
 - [搜索旋转排序数组](#搜索旋转排序数组)
 - [旋转图像](#旋转图像)
+- [最大子数组和](#最大子数组和)
 
 # [两数之和](https://leetcode.cn/problems/two-sum/)
 
@@ -705,5 +706,57 @@ class Solution:
 
 rust
 ```rust
+impl Solution {
+    pub fn rotate(matrix: &mut Vec<Vec<i32>>) {
+        let n = matrix.len();
+        for i in 0..n / 2 {
+            for j in 0..n {
+                let tmp = matrix[i][j];
+                matrix[i][j] = matrix[n - i - 1][j];
+                matrix[n - i - 1][j] = tmp;
+            }
+        }
+        for i in 0..n {
+            for j in 0..i {
+                let tmp = matrix[i][j];
+                matrix[i][j] = matrix[j][i];
+                matrix[j][i] = tmp;
+            }
+        }
+    }
+}
+```
 
+# [最大子数组和](https://leetcode.cn/problems/maximum-subarray/)
+
+python
+```python
+from typing import List
+
+
+class Solution:
+    def maxSubArray(self, nums: List[int]) -> int:
+        size = len(nums)
+        pre = 0
+        res = nums[0]
+        for i in range(size):
+            pre = max(nums[i], pre + nums[i])
+            res = max(res, pre)
+        return res
+```
+
+rust
+```rust
+impl Solution {
+    pub fn max_sub_array(nums: Vec<i32>) -> i32 {
+        let mut pre = 0;
+        let mut res = nums[0];
+        for num in nums {
+            pre = std::cmp::max(pre + num, num);
+            if num > 0 
+            res = std::cmp::max(res, pre);
+        }
+        res
+    }
+}
 ```
