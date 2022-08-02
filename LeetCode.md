@@ -7,6 +7,7 @@
 - [寻找重复数](#寻找重复数)
 - [三数之和](#三数之和)
 - [搜索旋转排序数组](#搜索旋转排序数组)
+- [旋转图像](#旋转图像)
 
 # [两数之和](https://leetcode.cn/problems/two-sum/)
 
@@ -683,4 +684,26 @@ impl Solution {
         return -1;
     }
 }
+```
+
+# [旋转图像](https://leetcode.cn/problems/rotate-image/)
+
+python
+```python
+class Solution:
+    def rotate(self, matrix: List[List[int]]) -> None:
+        n = len(matrix)
+        # 水平翻转
+        for i in range(n // 2):
+            for j in range(n):
+                matrix[i][j], matrix[n - i - 1][j] = matrix[n - i - 1][j], matrix[i][j]
+        # 主对角线翻转
+        for i in range(n):
+            for j in range(i):
+                matrix[i][j], matrix[j][i] = matrix[j][i], matrix[i][j]
+```
+
+rust
+```rust
+
 ```
