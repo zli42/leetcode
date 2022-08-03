@@ -1,18 +1,75 @@
 - [两数之和](#两数之和)
+  - [哈希表](#哈希表)
+    - [python](#python)
+    - [rust](#rust)
+- [删除有序数组中的重复项](#删除有序数组中的重复项)
+  - [双指针](#双指针)
+    - [python](#python-1)
+    - [rust](#rust-1)
+- [合并两个有序数组](#合并两个有序数组)
+  - [双指针](#双指针-1)
+    - [python](#python-2)
+    - [rust](#rust-2)
 - [二叉树的中序遍历](#二叉树的中序遍历)
+  - [递归](#递归)
+    - [python](#python-3)
+    - [rust](#rust-3)
+  - [带状态的迭代](#带状态的迭代)
+    - [python](#python-4)
+    - [rust](#rust-4)
 - [对称二叉树](#对称二叉树)
+  - [递归](#递归-1)
+    - [python](#python-5)
+    - [rust](#rust-5)
+  - [迭代](#迭代)
+    - [python](#python-6)
+    - [rust](#rust-6)
 - [二叉树的最大深度](#二叉树的最大深度)
+  - [递归](#递归-2)
+    - [python](#python-7)
+    - [rust](#rust-7)
+  - [迭代](#迭代-1)
+    - [python](#python-8)
+    - [rust](#rust-8)
 - [将有序数组转换为二叉搜索树](#将有序数组转换为二叉搜索树)
+  - [二叉搜索树](#二叉搜索树)
+    - [python](#python-9)
+- [买卖股票的最佳时机](#买卖股票的最佳时机)
+  - [动态规划](#动态规划)
+    - [python](#python-10)
+    - [rust](#rust-9)
 - [两个数组的交集](#两个数组的交集)
+  - [哈希表](#哈希表-1)
+    - [python](#python-11)
+    - [rust](#rust-10)
 - [寻找重复数](#寻找重复数)
+- [盛最多水的容器](#盛最多水的容器)
+  - [双指针](#双指针-2)
+    - [python](#python-12)
+    - [rust](#rust-11)
 - [三数之和](#三数之和)
+  - [双指针](#双指针-3)
+    - [python](#python-13)
+    - [rust](#rust-12)
 - [搜索旋转排序数组](#搜索旋转排序数组)
-- [旋转图像](#旋转图像)
+  - [二分查找](#二分查找)
+    - [python](#python-14)
+    - [rust](#rust-13)
+- [全排列](#全排列)
+  - [回溯](#回溯)
+    - [python](#python-15)
+    - [rust](#rust-14)
 - [最大子数组和](#最大子数组和)
+  - [动态规划](#动态规划-1)
+    - [python](#python-16)
+    - [rust](#rust-15)
 
 # [两数之和](https://leetcode.cn/problems/two-sum/)
 
-python
+## 哈希表
+
+### python
+
 ```python
 class Solution:
     def twoSum(self, nums: List[int], target: int) -> List[int]:
@@ -24,7 +81,8 @@ class Solution:
         return []
 ```
 
-rust
+### rust
+
 ```rust
 impl Solution {
     pub fn two_sum(nums: Vec<i32>, target: i32) -> Vec<i32> {
@@ -42,9 +100,189 @@ impl Solution {
 }
 ```
 
+* 时间复杂度：$O(N)$，其中 $N$ 是数组中的元素数量。对于每一个元素 `x`，我们可以 $O(1)$ 地寻找 `target - x`。
+* 空间复杂度：$O(N)$，其中 $N$ 是数组中的元素数量。主要为哈希表的开销。
+
+# [删除有序数组中的重复项](https://leetcode.cn/problems/remove-duplicates-from-sorted-array/)
+
+## 双指针
+
+### python
+
+```python
+class Solution:
+    def removeDuplicates(self, nums: List[int]) -> int:
+        if not nums:
+            return 0
+        
+        n = len(nums)
+        fast = slow = 1
+        while fast < n:
+            if nums[fast] != nums[fast - 1]:
+                nums[slow] = nums[fast]
+                slow += 1
+            fast += 1
+        
+        return slow
+```
+
+### rust
+
+```rust
+impl Solution {
+    pub fn remove_duplicates(nums: &mut Vec<i32>) -> i32 {
+        let n = nums.len();
+        let mut fast = 1;
+        let mut slow = 1;
+        while fast < n {
+            if nums[fast] != nums[fast - 1] {
+                nums[slow] = nums[fast];
+                slow += 1;
+            }
+            fast += 1;
+        }
+        slow as i32
+    }
+}
+```
+
+* 时间复杂度：$O(n)$，其中 $n$ 是数组的长度。快指针和慢指针最多各移动 $n$ 次。
+* 空间复杂度：$O(1)$。只需要使用常数的额外空间。
+
+# [合并两个有序数组](https://leetcode.cn/problems/merge-sorted-array/)
+
+## 双指针
+
+### python
+
+```python
+class Solution:
+    def merge(self, nums1: List[int], m: int, nums2: List[int], n: int) -> None:
+        """
+        Do not return anything, modify nums1 in-place instead.
+        """
+        p1, p2 = m - 1, n - 1
+        tail = m + n - 1
+        while p1 >= 0 or p2 >= 0:
+            if p1 == -1:
+                nums1[tail] = nums2[p2]
+                p2 -= 1
+            elif p2 == -1:
+                nums1[tail] = nums1[p1]
+                p1 -= 1
+            elif nums1[p1] > nums2[p2]:
+                nums1[tail] = nums1[p1]
+                p1 -= 1
+            else:
+                nums1[tail] = nums2[p2]
+                p2 -= 1
+            tail -= 1
+```
+
+### rust
+
+```rust
+impl Solution {
+    pub fn merge(nums1: &mut Vec<i32>, m: i32, nums2: &mut Vec<i32>, n: i32) {
+        let mut p1 = m as usize;
+        let mut p2 = n as usize;
+        let mut tail = (m + n - 1) as usize;
+        while p1 > 0 || p2 > 0 {
+            if p1 == 0 {
+                nums1[tail] = nums2[p2 - 1];
+                p2 -= 1;
+            } else if p2 == 0 {
+                nums1[tail] = nums1[p1 - 1];
+                p1 -= 1;
+            } else if nums1[p1 - 1] > nums2[p2 - 1] {
+                nums1[tail] = nums1[p1 - 1];
+                p1 -= 1;
+            } else {
+                nums1[tail] = nums2[p2 - 1];
+                p2 -= 1;
+            }
+            tail -= 1
+        }
+    }
+}
+```
+
+* 时间复杂度：$O(m+n)$。指针移动单调递减，最多移动 $m+n$ 次，因此时间复杂度为 $O(m+n)$。
+* 空间复杂度：$O(1)$。直接对数组 $nums_1$ 原地修改，不需要额外空间。
+
 # [二叉树的中序遍历](https://leetcode.cn/problems/binary-tree-inorder-traversal/)
 
-python
+## 递归
+
+### python
+
+```python
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution(object):
+	def inorderTraversal(self, root):
+		res = []
+		def dfs(node):
+			if not node:
+				return
+			dfs(node.left)
+			res.append(node.val)
+			dfs(node.right)
+		dfs(root)
+		return res
+```
+
+### rust
+
+```rust
+// Definition for a binary tree node.
+// #[derive(Debug, PartialEq, Eq)]
+// pub struct TreeNode {
+//   pub val: i32,
+//   pub left: Option<Rc<RefCell<TreeNode>>>,
+//   pub right: Option<Rc<RefCell<TreeNode>>>,
+// }
+//
+// impl TreeNode {
+//   #[inline]
+//   pub fn new(val: i32) -> Self {
+//     TreeNode {
+//       val,
+//       left: None,
+//       right: None
+//     }
+//   }
+// }
+use std::rc::Rc;
+use std::cell::RefCell;
+impl Solution {
+    pub fn inorder_traversal(root: Option<Rc<RefCell<TreeNode>>>) -> Vec<i32> {
+        fn dfs(node: Option<Rc<RefCell<TreeNode>>>, res: &mut Vec<i32>) {
+            if let Some(node) = node {
+                dfs(node.borrow().left.clone(), res);
+                res.push(node.borrow().val);
+                dfs(node.borrow().right.clone(), res);
+            }
+        }
+        let mut res = vec![];
+        dfs(root, &mut res);
+        res
+    }
+}
+```
+
+* 时间复杂度：$O(n)$，其中 $n$ 为二叉树节点的个数。二叉树的遍历中每个节点会被访问一次且只会被访问一次。
+* 空间复杂度：$O(n)$。空间复杂度取决于递归的栈深度，而栈深度在二叉树为一条链的情况下会达到 $O(n)$ 的级别。
+
+
+## 带状态的迭代
+
+### python
+
 ```python
 class Solution:
     def inorderTraversal(self, root: TreeNode) -> List[int]:
@@ -62,7 +300,9 @@ class Solution:
                 res.append(node.val)
         return res
 ```
-rust
+
+### rust
+
 ```rust
 // Definition for a binary tree node.
 // #[derive(Debug, PartialEq, Eq)]
@@ -110,9 +350,15 @@ impl Solution {
 }
 ```
 
+* 时间复杂度：$O(n)$。
+* 空间复杂度：$O(n)$。
+
 # [对称二叉树](https://leetcode.cn/problems/symmetric-tree/)
 
-python
+## 递归
+
+### python
+
 ```python
 # Definition for a binary tree node.
 # class TreeNode:
@@ -120,8 +366,6 @@ python
 #         self.val = val
 #         self.left = left
 #         self.right = right
-
-# DFS
 class Solution:
     def isSymmetric(self, root: Optional[TreeNode]) -> bool:
         if root is None:
@@ -137,29 +381,10 @@ class Solution:
             return dfs(left.left, right.right) and dfs(left.right, right.left)
 
         return dfs(root.left, root.right) 
-
-# BFS
-class Solution:
-    def isSymmetric(self, root: Optional[TreeNode]) -> bool:
-        if root is None:
-            return True
-        
-        queue = [(root.left,root.right)]
-        while queue:
-            left, right = queue.pop()
-            if left is None and right is None:
-                continue
-            if left is None or right is None:
-                return False
-            if left.val != right.val:
-                return False
-            queue.append((left.left,right.right))
-            queue.append((left.right,right.left))
-
-        return True
 ```
 
-rust
+### rust
+
 ```rust
 // Definition for a binary tree node.
 // #[derive(Debug, PartialEq, Eq)]
@@ -182,7 +407,6 @@ rust
 use std::rc::Rc;
 use std::cell::RefCell;
 
-// DFS
 impl Solution {
     pub fn is_symmetric(root: Option<Rc<RefCell<TreeNode>>>) -> bool {
         fn dfs(
@@ -208,8 +432,63 @@ impl Solution {
         }
     }
 }
+```
 
-// BFS
+* 时间复杂度：这里遍历了这棵树，渐进时间复杂度为 $O(n)$。
+* 空间复杂度：这里的空间复杂度和递归使用的栈空间有关，这里递归层数不超过 $n$，故渐进空间复杂度为 $O(n)$。
+
+## 迭代 
+
+### python
+
+```python
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def isSymmetric(self, root: Optional[TreeNode]) -> bool:
+        if root is None:
+            return True
+        
+        queue = [(root.left,root.right)]
+        while queue:
+            left, right = queue.pop()
+            if left is None and right is None:
+                continue
+            if left is None or right is None:
+                return False
+            if left.val != right.val:
+                return False
+            queue.append((left.left,right.right))
+            queue.append((left.right,right.left))
+
+        return True
+```
+
+### rust
+
+```rust
+// Definition for a binary tree node.
+// #[derive(Debug, PartialEq, Eq)]
+// pub struct TreeNode {
+//   pub val: i32,
+//   pub left: Option<Rc<RefCell<TreeNode>>>,
+//   pub right: Option<Rc<RefCell<TreeNode>>>,
+// }
+//
+// impl TreeNode {
+//   #[inline]
+//   pub fn new(val: i32) -> Self {
+//     TreeNode {
+//       val,
+//       left: None,
+//       right: None
+//     }
+//   }
+// }
 impl Solution {
     pub fn is_symmetric(root: Option<Rc<RefCell<TreeNode>>>) -> bool {
         if let Some(root) = root {
@@ -234,9 +513,15 @@ impl Solution {
 }
 ```
 
- # [二叉树的最大深度](https://leetcode.cn/problems/maximum-depth-of-binary-tree/)
+* 时间复杂度：这里遍历了这棵树，渐进时间复杂度为 $O(n)$。
+* 空间复杂度：这里需要用一个队列来维护节点，每个节点最多进队一次，出队一次，队列中最多不会超过 $n$ 个点，故渐进空间复杂度为 $O(n)$。
 
-python
+# [二叉树的最大深度](https://leetcode.cn/problems/maximum-depth-of-binary-tree/)
+
+## 递归
+
+### python
+
 ```python
 # Definition for a binary tree node.
 # class TreeNode:
@@ -244,8 +529,6 @@ python
 #         self.val = val
 #         self.left = left
 #         self.right = right
-
-# DFS
 class Solution:
     def maxDepth(self, root: Optional[TreeNode]) -> int:
         if root == None:
@@ -255,29 +538,10 @@ class Solution:
         rightHeight = self.maxDepth(root.right)
 
         return max(leftHeight, rightHeight) + 1
-
-# BFS
-class Solution:
-    def maxDepth(self, root: Optional[TreeNode]) -> int:
-        if root == None:
-            return 0
-
-        queue = [root]
-        depth = 0
-
-        while queue:
-            n = len(queue)
-            for i in range(n):
-                node = queue.pop(0)
-                if node.left:
-                    queue.append(node.left)
-                if node.right:
-                    queue.append(node.right)
-            depth += 1
-        return depth
 ```
 
-rust
+### rust
+
 ```rust
 // Definition for a binary tree node.
 // #[derive(Debug, PartialEq, Eq)]
@@ -300,7 +564,6 @@ rust
 use std::rc::Rc;
 use std::cell::RefCell;
 
-// DFS
 impl Solution {
     pub fn max_depth(root: Option<Rc<RefCell<TreeNode>>>) -> i32 {
         match root {
@@ -313,8 +576,63 @@ impl Solution {
         }
     }
 }
+```
 
-// BFS
+* 时间复杂度：$O(n)$，其中 $n$ 为二叉树节点的个数。每个节点在递归中只被遍历一次。
+* 空间复杂度：$O(height)$，其中 $height$ 表示二叉树的高度。递归函数需要栈空间，而栈空间取决于递归的深度，因此空间复杂度等价于二叉树的高度。
+
+## 迭代
+
+### python
+
+```python
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def maxDepth(self, root: Optional[TreeNode]) -> int:
+        if root == None:
+            return 0
+
+        queue = [root]
+        depth = 0
+
+        while queue:
+            n = len(queue)
+            for i in range(n):
+                node = queue.pop(0)
+                if node.left:
+                    queue.append(node.left)
+                if node.right:
+                    queue.append(node.right)
+            depth += 1
+        return depth
+```
+
+### rust
+
+```rust
+// Definition for a binary tree node.
+// #[derive(Debug, PartialEq, Eq)]
+// pub struct TreeNode {
+//   pub val: i32,
+//   pub left: Option<Rc<RefCell<TreeNode>>>,
+//   pub right: Option<Rc<RefCell<TreeNode>>>,
+// }
+//
+// impl TreeNode {
+//   #[inline]
+//   pub fn new(val: i32) -> Self {
+//     TreeNode {
+//       val,
+//       left: None,
+//       right: None
+//     }
+//   }
+// }
 impl Solution {
     pub fn max_depth(root: Option<Rc<RefCell<TreeNode>>>) -> i32 {
         match root {
@@ -343,10 +661,15 @@ impl Solution {
     }
 }
 ```
+* 时间复杂度：$O(n)$，其中 $n$ 为二叉树的节点个数。与方法一同样的分析，每个节点只会被访问一次。
+* 空间复杂度：此方法空间的消耗取决于队列存储的元素数量，其在最坏情况下会达到 $O(n)$。
 
 # [将有序数组转换为二叉搜索树](https://leetcode.cn/problems/convert-sorted-array-to-binary-search-tree/)
 
-python
+## 二叉搜索树
+
+### python
+
 ```python
 # Definition for a binary tree node.
 # class TreeNode:
@@ -408,9 +731,52 @@ impl Solution {
     }
 }
 ```
+
+* 时间复杂度：$O(n)$，其中 $n$ 是数组的长度。每个数字只访问一次。
+* 空间复杂度：$O(\log{n})$，其中 $n$ 是数组的长度。空间复杂度不考虑返回值，因此空间复杂度主要取决于递归栈的深度，递归栈的深度是 $O(\log{n})$。
+
+# [买卖股票的最佳时机](https://leetcode.cn/problems/best-time-to-buy-and-sell-stock/)
+
+## 动态规划
+
+### python
+
+```python
+class Solution:
+    def maxProfit(self, prices: List[int]) -> int:
+        maxprofit = 0
+        minprice = prices[0]
+        for price in prices:
+            maxprofit = max(price - minprice, maxprofit)
+            minprice = min(price, minprice)
+        return maxprofit
+```
+
+### rust
+
+```rust
+impl Solution {
+    pub fn max_profit(prices: Vec<i32>) -> i32 {
+        let mut maxprofit = 0;
+        let mut minprice = prices[0];
+        for price in prices {
+            maxprofit = std::cmp::max(price - minprice, maxprofit);
+            minprice = std::cmp::min(price, minprice);
+        }
+        maxprofit
+    }
+}
+```
+
+* 时间复杂度：$O(n)$，只需要遍历一次。
+* 空间复杂度：$O(1)$，只使用了常数个变量。
+
 # [两个数组的交集](https://leetcode.cn/problems/intersection-of-two-arrays-ii/)
 
-python
+## 哈希表
+
+### python
+
 ```python
 class Solution:
     def intersect(self, nums1: List[int], nums2: List[int]) -> List[int]:
@@ -430,7 +796,8 @@ class Solution:
         return intersection
 ```
 
-rust
+### rust
+
 ```rust
 impl Solution {
     pub fn intersect(nums1: Vec<i32>, nums2: Vec<i32>) -> Vec<i32> {
@@ -457,6 +824,9 @@ impl Solution {
     }
 }
 ```
+
+* 时间复杂度：$O(m+n)$，其中 $m$ 和 $n$ 分别是两个数组的长度。需要遍历两个数组并对哈希表进行操作，哈希表操作的时间复杂度是 $O(1)$，因此总时间复杂度与两个数组的长度和呈线性关系。
+* 空间复杂度：$O(min(m,n))$，其中 $m$ 和 $n$ 分别是两个数组的长度。对较短的数组进行哈希表的操作，哈希表的大小不会超过较短的数组的长度。为返回值创建一个数组 `intersection`，其长度为较短的数组的长度。
 
 # [寻找重复数](https://leetcode.cn/problems/find-the-duplicate-number/)
 
@@ -544,9 +914,59 @@ impl Solution {
     }
 }
 ```
+
+# [盛最多水的容器](https://leetcode.cn/problems/container-with-most-water/)
+
+## 双指针
+
+### python
+
+```python
+class Solution:
+    def maxArea(self, height: List[int]) -> int:
+        l, r = 0, len(height) - 1
+        ans = 0
+        while l < r:
+            area = min(height[l], height[r]) * (r - l)
+            ans = max(ans, area)
+            if height[l] <= height[r]:
+                l += 1
+            else:
+                r -= 1
+        return ans
+```
+
+### rust
+
+```rust
+impl Solution {
+    pub fn max_area(height: Vec<i32>) -> i32 {
+        let mut l = 0;
+        let mut r = height.len() - 1;
+        let mut ans = 0;
+        while l < r {
+            let area = std::cmp::min(height[l], height[r]) * (r - l) as i32;
+            ans = std::cmp::max(ans, area);
+            if height[l] <= height[r] {
+                l += 1;
+            } else {
+                r -= 1;
+            }
+        }
+        ans
+    }
+}
+```
+
+* 时间复杂度：$O(N)$，双指针总计最多遍历整个数组一次。
+* 空间复杂度：$O(1)$，只需要额外的常数级别的空间。
+
 # [三数之和](https://leetcode.cn/problems/3sum/)
 
-python
+## 双指针
+
+### python
+
 ```python
 class Solution:
     def threeSum(self, nums: List[int]) -> List[List[int]]:
@@ -582,7 +1002,8 @@ class Solution:
         return res
 ```
 
-rust
+### rust
+
 ```rust
 impl Solution {
     pub fn three_sum(nums: Vec<i32>) -> Vec<Vec<i32>> {
@@ -630,9 +1051,15 @@ impl Solution {
 }
 ```
 
+* 时间复杂度：$O(N^2)$，其中 $N$ 是数组 $nums$ 的长度。
+* 空间复杂度：$O(logN)$。我们忽略存储答案的空间，额外的排序的空间复杂度为 $O(logN)$。然而我们修改了输入的数组 $nums$，在实际情况下不一定允许，因此也可以看成使用了一个额外的数组存储了 $nums$ 的副本并进行排序，空间复杂度为 $O(N)$。
+
 # [搜索旋转排序数组](https://leetcode.cn/problems/search-in-rotated-sorted-array/)
 
-python
+## 二分查找
+
+### python
+
 ```python
 class Solution:
     def search(self, nums: List[int], target: int) -> int:
@@ -656,7 +1083,8 @@ class Solution:
         return -1
 ```
 
-rust
+### rust
+
 ```rust
 impl Solution {
     pub fn search(nums: Vec<i32>, target: i32) -> i32 {
@@ -687,65 +1115,87 @@ impl Solution {
 }
 ```
 
-# [旋转图像](https://leetcode.cn/problems/rotate-image/)
+* 时间复杂度： $O(\log{n})$，其中 $n$ 为 $nums$ 数组的大小。整个算法时间复杂度即为二分查找的时间复杂度 $O(\log{n})$。
+* 空间复杂度： $O(1)$ 。我们只需要常数级别的空间存放变量。
 
-python
+# [全排列](https://leetcode.cn/problems/permutations/)
+
+## 回溯
+
+### python
+
 ```python
 class Solution:
-    def rotate(self, matrix: List[List[int]]) -> None:
-        n = len(matrix)
-        # 水平翻转
-        for i in range(n // 2):
-            for j in range(n):
-                matrix[i][j], matrix[n - i - 1][j] = matrix[n - i - 1][j], matrix[i][j]
-        # 主对角线翻转
-        for i in range(n):
-            for j in range(i):
-                matrix[i][j], matrix[j][i] = matrix[j][i], matrix[i][j]
+    def permute(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: List[List[int]]
+        """
+        def backtrack(first = 0):
+            # 所有数都填完了
+            if first == n:  
+                res.append(nums[:])
+            for i in range(first, n):
+                # 动态维护数组
+                nums[first], nums[i] = nums[i], nums[first]
+                # 继续递归填下一个数
+                backtrack(first + 1)
+                # 撤销操作
+                nums[first], nums[i] = nums[i], nums[first]
+        
+        n = len(nums)
+        res = []
+        backtrack()
+        return res
 ```
 
-rust
+### rust
+
 ```rust
 impl Solution {
-    pub fn rotate(matrix: &mut Vec<Vec<i32>>) {
-        let n = matrix.len();
-        for i in 0..n / 2 {
-            for j in 0..n {
-                let tmp = matrix[i][j];
-                matrix[i][j] = matrix[n - i - 1][j];
-                matrix[n - i - 1][j] = tmp;
+    pub fn permute(nums: Vec<i32>) -> Vec<Vec<i32>> {
+        fn backtrack(first: usize, nums: &mut Vec<i32>, res: &mut Vec<Vec<i32>>) {
+            let n = nums.len();
+            if first == n {
+                res.push(nums.to_vec());
+            } else {
+                for i in first..n {
+                    nums.swap(i, first);
+                    backtrack(first + 1, nums, res);
+                    nums.swap(i, first);
+                }
             }
         }
-        for i in 0..n {
-            for j in 0..i {
-                let tmp = matrix[i][j];
-                matrix[i][j] = matrix[j][i];
-                matrix[j][i] = tmp;
-            }
-        }
+        let mut nums = nums;
+        let mut res = Vec::new();
+        backtrack(0, &mut nums, &mut res);
+        res
     }
 }
 ```
 
+* 时间复杂度：$O(n \times n!)$，其中 $n$ 为序列的长度。算法的复杂度首先受 `backtrack` 的调用次数制约，`backtrack` 的调用次数为 $\sum_{k = 1}^{n}{P(n, k)}$ 次，其中 $P(n, k) = \frac{n!}{(n - k)!} = n (n - 1) \dots (n - k + 1)$ ，该式被称作 n 的 k - 排列，或者部分排列。而 $\sum_{k = 1}^{n}{P(n, k)} = n! + \frac{n!}{1!} + \frac{n!}{2!} + \frac{n!}{3!} + \ldots + \frac{n!}{(n-1)!} < 2n! + \frac{n!}{2} + \frac{n!}{2^2} + \frac{n!}{2^{n-2}} < 3n!$ 这说明 `backtrack` 的调用次数是 $O(n!)$ 的。而对于 `backtrack` 调用的每个叶结点（共 $n!$ 个），我们需要将当前答案使用 $O(n)$ 的时间复制到答案数组中，相乘得时间复杂度为 $O(n \times n!)$。因此时间复杂度为 $O(n \times n!)$。
+* 空间复杂度：$O(n)$，其中 $n$ 为序列的长度。除答案数组以外，递归函数在递归过程中需要为每一层递归函数分配栈空间，所以这里需要额外的空间且该空间取决于递归的深度，这里可知递归调用深度为 $O(n)$。
+
 # [最大子数组和](https://leetcode.cn/problems/maximum-subarray/)
 
-python
+## 动态规划
+
+### python
+
 ```python
-from typing import List
-
-
 class Solution:
     def maxSubArray(self, nums: List[int]) -> int:
-        size = len(nums)
         pre = 0
         res = nums[0]
-        for i in range(size):
-            pre = max(nums[i], pre + nums[i])
+        for num in nums:
+            pre = max(num, pre + num)
             res = max(res, pre)
         return res
 ```
 
-rust
+### rust
+
 ```rust
 impl Solution {
     pub fn max_sub_array(nums: Vec<i32>) -> i32 {
@@ -760,3 +1210,6 @@ impl Solution {
     }
 }
 ```
+
+* 时间复杂度：$O(n)$，其中 $n$ 为 `nums` 数组的长度。我们只需要遍历一遍数组即可求得答案。
+* 空间复杂度：$O(1)$。我们只需要常数空间存放若干变量。
