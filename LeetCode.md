@@ -1242,7 +1242,21 @@ class Solution:
 ### rust
 
 ```rust
-
+impl Solution {
+    pub fn can_jump(nums: Vec<i32>) -> bool {
+        let n = nums.len();
+        let mut rightmost = 0;
+        for i in 0..n {
+            if i <= rightmost {
+                rightmost = std::cmp::max(rightmost, i + nums[i] as usize);
+                if rightmost >= n - 1 {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+}
 ```
 
 * 时间复杂度：$O(n)$，其中 $n$ 为数组的大小。只需要访问 nums 数组一遍，共 $n$ 个位置。
