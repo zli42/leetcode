@@ -34,35 +34,40 @@
 - [将有序数组转换为二叉搜索树](#将有序数组转换为二叉搜索树)
   - [二叉搜索树](#二叉搜索树)
     - [python](#python-9)
+    - [rust](#rust-9)
 - [买卖股票的最佳时机](#买卖股票的最佳时机)
   - [动态规划](#动态规划)
     - [python](#python-10)
-    - [rust](#rust-9)
+    - [rust](#rust-10)
 - [两个数组的交集](#两个数组的交集)
   - [哈希表](#哈希表-1)
     - [python](#python-11)
-    - [rust](#rust-10)
+    - [rust](#rust-11)
 - [寻找重复数](#寻找重复数)
 - [盛最多水的容器](#盛最多水的容器)
   - [双指针](#双指针-2)
     - [python](#python-12)
-    - [rust](#rust-11)
+    - [rust](#rust-12)
 - [三数之和](#三数之和)
   - [双指针](#双指针-3)
     - [python](#python-13)
-    - [rust](#rust-12)
+    - [rust](#rust-13)
 - [搜索旋转排序数组](#搜索旋转排序数组)
   - [二分查找](#二分查找)
     - [python](#python-14)
-    - [rust](#rust-13)
+    - [rust](#rust-14)
 - [全排列](#全排列)
   - [回溯](#回溯)
     - [python](#python-15)
-    - [rust](#rust-14)
+    - [rust](#rust-15)
 - [最大子数组和](#最大子数组和)
   - [动态规划](#动态规划-1)
     - [python](#python-16)
-    - [rust](#rust-15)
+    - [rust](#rust-16)
+- [跳跃游戏](#跳跃游戏)
+  - [贪心](#贪心)
+    - [python](#python-17)
+    - [rust](#rust-17)
 
 # [两数之和](https://leetcode.cn/problems/two-sum/)
 
@@ -693,7 +698,8 @@ class Solution:
         return helper(0, len(nums))
 ```
 
-rust
+### rust
+
 ```rust
 // Definition for a binary tree node.
 // #[derive(Debug, PartialEq, Eq)]
@@ -1213,3 +1219,31 @@ impl Solution {
 
 * 时间复杂度：$O(n)$，其中 $n$ 为 `nums` 数组的长度。我们只需要遍历一遍数组即可求得答案。
 * 空间复杂度：$O(1)$。我们只需要常数空间存放若干变量。
+
+
+# [跳跃游戏](https://leetcode.cn/problems/jump-game/)
+
+## 贪心
+
+### python
+
+```python
+class Solution:
+    def canJump(self, nums: List[int]) -> bool:
+        n, rightmost = len(nums), 0
+        for i in range(n):
+            if i <= rightmost:
+                rightmost = max(rightmost, i + nums[i])
+                if rightmost >= n - 1:
+                    return True
+        return False
+```
+
+### rust
+
+```rust
+
+```
+
+* 时间复杂度：$O(n)$，其中 $n$ 为数组的大小。只需要访问 nums 数组一遍，共 $n$ 个位置。
+* 空间复杂度：$O(1)$，不需要额外的空间开销。
