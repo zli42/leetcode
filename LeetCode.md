@@ -68,6 +68,10 @@
   - [贪心](#贪心)
     - [python](#python-17)
     - [rust](#rust-17)
+- [合并区间](#合并区间)
+  - [贪心](#贪心-1)
+    - [python](#python-18)
+    - [rust](#rust-18)
 
 # [两数之和](https://leetcode.cn/problems/two-sum/)
 
@@ -1261,3 +1265,51 @@ impl Solution {
 
 * 时间复杂度：$O(n)$，其中 $n$ 为数组的大小。只需要访问 nums 数组一遍，共 $n$ 个位置。
 * 空间复杂度：$O(1)$，不需要额外的空间开销。
+
+# [合并区间](https://leetcode.cn/problems/merge-intervals/)
+
+## 贪心
+
+### python
+
+```python
+class Solution:
+    def merge(self, intervals: List[List[int]]) -> List[List[int]]:
+        intervals.sort(key=lambda x: x[0])
+
+        merged = []
+        for interval in intervals:
+            # 如果列表为空，或者当前区间与上一区间不重合，直接添加
+            if not merged or merged[-1][1] < interval[0]:
+                merged.append(interval)
+            else:
+                # 否则的话，我们就可以与上一区间进行合并
+                merged[-1][1] = max(merged[-1][1], interval[1])
+
+        return merged
+```
+
+### rust
+
+```rust
+impl Solution {
+    pub fn merge(intervals: Vec<Vec<i32>>) -> Vec<Vec<i32>> {
+        let mut intervals = intervals;
+        intervals.sort();
+
+        let mut merged = vec![intervals[0].clone()];
+        for interval in intervals {
+            let n = merged.len() - 1;
+            if merged[n][1] < interval[0] {
+                merged.push(interval);
+            } else {
+                merged[n][1] = std::cmp::max(merged[n][1], interval[1])
+            }
+        }
+        return merged;
+    }
+}
+```
+
+* 时间复杂度：$O(n\log{n})$，其中 $n$ 为区间的数量。除去排序的开销，我们只需要一次线性扫描，所以主要的时间开销是排序的 $O(n\log{n})$。
+* 空间复杂度：$O(\log{n})$，其中 $n$ 为区间的数量。这里计算的是存储答案之外，使用的额外空间。$O(\log{n})$ 即为排序所需要的空间复杂度。
