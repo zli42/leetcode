@@ -72,6 +72,10 @@
   - [贪心](#贪心-1)
     - [python](#python-18)
     - [rust](#rust-18)
+- [单词搜索](#单词搜索)
+  - [回溯](#回溯-1)
+    - [python](#python-19)
+  - [rust](#rust-19)
 
 # [两数之和](https://leetcode.cn/problems/two-sum/)
 
@@ -1313,3 +1317,102 @@ impl Solution {
 
 * 时间复杂度：$O(n\log{n})$，其中 $n$ 为区间的数量。除去排序的开销，我们只需要一次线性扫描，所以主要的时间开销是排序的 $O(n\log{n})$。
 * 空间复杂度：$O(\log{n})$，其中 $n$ 为区间的数量。这里计算的是存储答案之外，使用的额外空间。$O(\log{n})$ 即为排序所需要的空间复杂度。
+
+# [单词搜索](https://leetcode.cn/problems/word-search/solution/dan-ci-sou-suo-by-leetcode-solution/)
+
+## 回溯
+
+### python
+
+```python
+class Solution:
+    def exist(self, board: List[List[str]], word: str) -> bool:
+        directions = [(0, 1), (0, -1), (1, 0), (-1, 0)]
+
+        def check(i: int, j: int, k: int) -> bool:
+            if board[i][j] != word[k]:
+                return False
+            if k == len(word) - 1:
+                return True
+            
+            visited.add((i, j))
+            result = False
+            for di, dj in directions:
+                newi, newj = i + di, j + dj
+                if 0 <= newi < len(board) and 0 <= newj < len(board[0]):
+                    if (newi, newj) not in visited:
+                        if check(newi, newj, k + 1):
+                            result = True
+                            break
+            
+            visited.remove((i, j))
+            return result
+
+        h, w = len(board), len(board[0])
+        visited = set()
+        for i in range(h):
+            for j in range(w):
+                if check(i, j, 0):
+                    return True
+        
+        return False
+```
+
+## rust
+
+```rust
+use std::collections::HashSet;
+
+impl Solution {
+    pub fn exist(board: Vec<Vec<char>>, word: String) -> bool {
+        fn check(
+            i: usize,
+            j: usize,
+            k: usize,
+            board: &Vec<Vec<char>>,
+            word: &Vec<char>,
+            visited: &mut HashSet<(usize, usize)>,
+        ) -> bool {
+            if board[i][j] != word[k] {
+                return false;
+            }
+            if k == word.len() - 1 {
+                return true;
+            }
+
+            visited.insert((i, j));
+            let mut result = false;
+            let directions: [(i32, i32); 4] = [(0, 1), (0, -1), (1, 0), (-1, 0)];
+            for (di, dj) in directions {
+                let newi = i + di as usize;
+                let newj = j + dj as usize;
+                let newk = k + 1;
+                if 0 <= newi && newi < board.len() && 0 <= newj && newj < board[0].len() {
+                    if !visited.contains(&(newi, newj)) {
+                        if check(newi, newj, newk, board, word, visited) {
+                            result = true;
+                            break;
+                        }
+                    }
+                }
+            }
+            visited.remove(&(i, j));
+            return result;
+        }
+
+        let word = word.chars().collect::<Vec<char>>();
+        let mut visited = HashSet::new();
+        for i in 0..board.len() {
+            for j in 0..board[0].len() {
+                if check(i, j, 0, &board, &word, &mut visited) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+}
+```
+
+* 时间复杂度：一个非常宽松的上界为 $O(MN \cdot 3^L)$，其中 $M$, $N$ 为网格的长度与宽度，$L$ 为字符串 `word` 的长度。在每次调用函数 `check` 时，除了第一次可以进入 $4$ 个分支以外，其余时间我们最多会进入 $3$ 个分支（因为每个位置只能使用一次，所以走过来的分支没法走回去）。由于单词长为 $L$，故 `check(i,j,0)` 的时间复杂度为 $O(3^L)$，而我们要执行 $O(MN)$ 次检查。然而，由于剪枝的存在，我们在遇到不匹配或已访问的字符时会提前退出，终止递归流程。因此，实际的时间复杂度会远远小于 $O(MN \cdot 3^L)$。
+* 空间复杂度：$O(MN)$。我们额外开辟了 $O(MN)$ 的 `visited` 数组，同时栈的深度最大为 $O(\min(L, MN))$。
