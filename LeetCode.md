@@ -76,6 +76,10 @@
   - [回溯](#回溯-1)
     - [python](#python-19)
   - [rust](#rust-19)
+- [解码方法](#解码方法)
+  - [动态规划](#动态规划-2)
+    - [python](#python-20)
+    - [rust](#rust-20)
 
 # [两数之和](https://leetcode.cn/problems/two-sum/)
 
@@ -1416,3 +1420,60 @@ impl Solution {
 
 * 时间复杂度：一个非常宽松的上界为 $O(MN \cdot 3^L)$，其中 $M$, $N$ 为网格的长度与宽度，$L$ 为字符串 `word` 的长度。在每次调用函数 `check` 时，除了第一次可以进入 $4$ 个分支以外，其余时间我们最多会进入 $3$ 个分支（因为每个位置只能使用一次，所以走过来的分支没法走回去）。由于单词长为 $L$，故 `check(i,j,0)` 的时间复杂度为 $O(3^L)$，而我们要执行 $O(MN)$ 次检查。然而，由于剪枝的存在，我们在遇到不匹配或已访问的字符时会提前退出，终止递归流程。因此，实际的时间复杂度会远远小于 $O(MN \cdot 3^L)$。
 * 空间复杂度：$O(MN)$。我们额外开辟了 $O(MN)$ 的 `visited` 数组，同时栈的深度最大为 $O(\min(L, MN))$。
+
+# [解码方法](https://leetcode.cn/problems/decode-ways/)
+
+## 动态规划
+
+### python
+
+```python
+class Solution:
+    def numDecodings(self, s: str) -> int:
+        n = len(s)
+        pp, pre, cur = 0, 1, 0
+        for i in range(1, n + 1):
+            cur = 0
+            if s[i - 1] != '0':
+                cur += pre
+            if i > 1 and s[i - 2] != '0' and int(s[i-2:i]) <= 26:
+                cur += pp
+            pp, pre = pre, cur
+        return cur
+```
+
+### rust
+
+```rust
+impl Solution {
+    pub fn num_decodings(s: String) -> i32 {
+        let s = s.chars().collect::<Vec<char>>();
+        let mut pp = 0;
+        let mut pre = 1;
+        let mut cur = 0;
+        for i in 1..s.len() + 1 {
+            cur = 0;
+            if s[i - 1] != '0' {
+                cur += pre;
+            }
+            if i > 1
+                && s[i - 2] != '0'
+                && s[i - 2..i]
+                    .iter()
+                    .collect::<String>()
+                    .parse::<i32>()
+                    .unwrap()
+                    <= 26
+            {
+                cur += pp;
+            }
+            pp = pre;
+            pre = cur;
+        }
+        cur
+    }
+}
+```
+
+* 时间复杂度：$O(n)$，其中 $n$ 是字符串 `s` 的长度。
+* 空间复杂度：$O(1)$。
