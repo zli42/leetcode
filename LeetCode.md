@@ -80,6 +80,10 @@
   - [动态规划](#动态规划-2)
     - [python](#python-20)
     - [rust](#rust-20)
+- [验证二叉搜索树](#验证二叉搜索树)
+  - [递归](#递归-3)
+    - [python](#python-21)
+    - [rust](#rust-21)
 
 # [两数之和](https://leetcode.cn/problems/two-sum/)
 
@@ -1477,3 +1481,78 @@ impl Solution {
 
 * 时间复杂度：$O(n)$，其中 $n$ 是字符串 `s` 的长度。
 * 空间复杂度：$O(1)$。
+
+# [验证二叉搜索树](https://leetcode.cn/problems/validate-binary-search-tree/)
+
+## 递归
+
+### python
+
+```python
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def isValidBST(self, root: Optional[TreeNode]) -> bool:
+        def helper(node, lower, upper) -> bool:
+            if not node:
+                return True
+            
+            val = node.val
+            if val <= lower or val >= upper:
+                return False
+                
+            return helper(node.right, val, upper) and helper(node.left, lower, val)
+
+        return helper(root, float('-inf'), float('inf'))
+```
+
+### rust
+
+```rust
+// Definition for a binary tree node.
+// #[derive(Debug, PartialEq, Eq)]
+// pub struct TreeNode {
+//   pub val: i32,
+//   pub left: Option<Rc<RefCell<TreeNode>>>,
+//   pub right: Option<Rc<RefCell<TreeNode>>>,
+// }
+//
+// impl TreeNode {
+//   #[inline]
+//   pub fn new(val: i32) -> Self {
+//     TreeNode {
+//       val,
+//       left: None,
+//       right: None
+//     }
+//   }
+// }
+use std::rc::Rc;
+use std::cell::RefCell;
+impl Solution {
+    pub fn is_valid_bst(root: Option<Rc<RefCell<TreeNode>>>) -> bool {
+        fn helper(node: &Option<Rc<RefCell<TreeNode>>>, lower: i64, upper: i64) -> bool {
+            match node {
+                None => true,
+                Some(node) => {
+                    let val = node.borrow().val as i64;
+                    if val <= lower || val >= upper {
+                        return false;
+                    }
+
+                    return helper(&node.borrow().left, lower, val)
+                        && helper(&node.borrow().right, val, upper);
+                }
+            }
+        }
+        helper(&root, std::i64::MIN, std::i64::MAX)
+    }
+}
+```
+
+* 时间复杂度：$O(n)$，其中 $n$ 为二叉树的节点个数。在递归调用的时候二叉树的每个节点最多被访问一次，因此时间复杂度为 $O(n)$。
+* 空间复杂度：$O(n)$，其中 $n$ 为二叉树的节点个数。递归函数在递归过程中需要为每一层递归函数分配栈空间，所以这里需要额外的空间且该空间取决于递归的深度，即二叉树的高度。最坏情况下二叉树为一条链，树的高度为 $n$ ，递归最深达到 $n$ 层，故最坏情况下空间复杂度为 $O(n)$ 。
