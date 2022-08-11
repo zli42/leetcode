@@ -84,6 +84,10 @@
   - [递归](#递归-3)
     - [python](#python-21)
     - [rust](#rust-21)
+- [二叉树的层序遍历](#二叉树的层序遍历)
+  - [广度优先搜索](#广度优先搜索)
+    - [python](#python-22)
+    - [rust](#rust-22)
 
 # [两数之和](https://leetcode.cn/problems/two-sum/)
 
@@ -1556,3 +1560,92 @@ impl Solution {
 
 * 时间复杂度：$O(n)$，其中 $n$ 为二叉树的节点个数。在递归调用的时候二叉树的每个节点最多被访问一次，因此时间复杂度为 $O(n)$。
 * 空间复杂度：$O(n)$，其中 $n$ 为二叉树的节点个数。递归函数在递归过程中需要为每一层递归函数分配栈空间，所以这里需要额外的空间且该空间取决于递归的深度，即二叉树的高度。最坏情况下二叉树为一条链，树的高度为 $n$ ，递归最深达到 $n$ 层，故最坏情况下空间复杂度为 $O(n)$ 。
+
+# [二叉树的层序遍历](https://leetcode.cn/problems/binary-tree-level-order-traversal/)
+
+## 广度优先搜索
+
+### python
+
+```python
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def levelOrder(self, root: Optional[TreeNode]) -> List[List[int]]:
+        res = []
+        if not root:
+            return res
+
+        queue = [root]
+        while queue:
+            level = []
+            for _ in range(len(queue)):
+                node = queue.pop(0)
+                level.append(node.val)
+                if node.left:
+                    queue.append(node.left)
+                if node.right:
+                    queue.append(node.right)
+            res.append(level)
+        return res
+```
+
+### rust
+
+```rust
+// Definition for a binary tree node.
+// #[derive(Debug, PartialEq, Eq)]
+// pub struct TreeNode {
+//   pub val: i32,
+//   pub left: Option<Rc<RefCell<TreeNode>>>,
+//   pub right: Option<Rc<RefCell<TreeNode>>>,
+// }
+// 
+// impl TreeNode {
+//   #[inline]
+//   pub fn new(val: i32) -> Self {
+//     TreeNode {
+//       val,
+//       left: None,
+//       right: None
+//     }
+//   }
+// }
+use std::rc::Rc;
+use std::cell::RefCell;
+impl Solution {
+    pub fn level_order(root: Option<Rc<RefCell<TreeNode>>>) -> Vec<Vec<i32>> {
+        match root {
+            None => vec![],
+            Some(root) => {
+                let mut res = vec![];
+                let mut queue = std::collections::VecDeque::new();
+                queue.push_back(root);
+                while !queue.is_empty() {
+                    let mut level = vec![];
+                    for _ in 0..queue.len() {
+                        if let Some(node) = queue.pop_front() {
+                            level.push(node.borrow().val);
+                            if let Some(left) = node.borrow().left.clone() {
+                                queue.push_back(left);
+                            }
+                            if let Some(right) = node.borrow().right.clone() {
+                                queue.push_back(right);
+                            }
+                        }
+                    }
+                    res.push(level);
+                }
+                res
+            }
+        }
+    }
+}
+```
+
+* 时间复杂度：每个点进队出队各一次，故渐进时间复杂度为 $O(n)$。
+* 空间复杂度：队列中元素的个数不超过 $n$ 个，故渐进空间复杂度为 $O(n)$。
