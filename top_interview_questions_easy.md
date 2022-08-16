@@ -76,6 +76,11 @@ class Solution:
 
 ### [Single Number](https://leetcode.cn/problems/single-number/)
 
+位异或运算
+1. 任何数和 $0$ 做异或运算，结果仍然是原来的数，即 $a \oplus 0=a$。
+2. 任何数和其自身做异或运算，结果是 $0$，即 $a \oplus a=0$。
+3. 异或运算满足交换律和结合律，即 $a \oplus b \oplus a=b \oplus a \oplus a=b \oplus (a \oplus a)=b \oplus0=b$。
+
 ```python
 class Solution:
     def singleNumber(self, nums: List[int]) -> int:
@@ -87,3 +92,27 @@ class Solution:
 
 * 时间复杂度：$O(n)$，其中 $n$ 是数组长度。只需要对数组遍历一次。
 * 空间复杂度：$O(1)$。
+
+### [Intersection of Two Arrays II](https://leetcode.cn/problems/intersection-of-two-arrays-ii/)
+
+```python
+class Solution:
+    def intersect(self, nums1: List[int], nums2: List[int]) -> List[int]:
+        if len(nums1) > len(nums2):
+            return self.intersect(nums2, nums1)
+
+        m = dict()
+        for num in nums1:
+            m[num] = m.setdefault(num, 0) + 1
+
+        intersection = list()
+        for num in nums2:
+            if m.get(num, 0) > 0:
+                intersection.append(num)
+                m[num] -= 1
+
+        return intersection
+```
+
+* 时间复杂度：$O(m+n)$，其中 $m$ 和 $n$ 分别是两个数组的长度。需要遍历两个数组并对哈希表进行操作，哈希表操作的时间复杂度是 $O(1)$，因此总时间复杂度与两个数组的长度和呈线性关系。
+* 空间复杂度：$O(\min(m,n))$，其中 $m$ 和 $n$ 分别是两个数组的长度。对较短的数组进行哈希表的操作，哈希表的大小不会超过较短的数组的长度。为返回值创建一个数组 `intersection`，其长度为较短的数组的长度。
