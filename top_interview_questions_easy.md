@@ -116,3 +116,24 @@ class Solution:
 
 * 时间复杂度：$O(m+n)$，其中 $m$ 和 $n$ 分别是两个数组的长度。需要遍历两个数组并对哈希表进行操作，哈希表操作的时间复杂度是 $O(1)$，因此总时间复杂度与两个数组的长度和呈线性关系。
 * 空间复杂度：$O(\min(m,n))$，其中 $m$ 和 $n$ 分别是两个数组的长度。对较短的数组进行哈希表的操作，哈希表的大小不会超过较短的数组的长度。为返回值创建一个数组 `intersection`，其长度为较短的数组的长度。
+
+
+### [Plus One](https://leetcode.cn/problems/plus-one/)
+
+```python
+class Solution:
+    def plusOne(self, digits: List[int]) -> List[int]:
+        n = len(digits)
+        for i in range(n - 1, -1, -1):
+            if digits[i] != 9:
+                digits[i] += 1
+                for j in range(i + 1, n):
+                    digits[j] = 0
+                return digits
+
+        # digits 中所有的元素均为 9
+        return [1] + [0] * n
+```
+
+* 时间复杂度：$O(n)$，其中 $n$ 是数组 `digits` 的长度。
+* 空间复杂度：$O(1)$。返回值不计入空间复杂度。
