@@ -137,3 +137,22 @@ class Solution:
 
 * 时间复杂度：$O(n)$，其中 $n$ 是数组 `digits` 的长度。
 * 空间复杂度：$O(1)$。返回值不计入空间复杂度。
+
+### [Move Zeroes](https://leetcode.cn/problems/move-zeroes/)
+
+```python
+class Solution:
+    def moveZeroes(self, nums: List[int]) -> None:
+        """
+        Do not return anything, modify nums in-place instead.
+        """
+        j = 0
+        for i in range(len(nums)):
+            if nums[i] != 0:
+                nums[i], nums[j] = nums[j], nums[i]
+                j += 1
+```
+
+* 时间复杂度：$O(n)$，其中 $n$ 为序列长度。每个位置至多被遍历两次。
+* 空间复杂度：$O(1)$。只需要常数的空间存放若干变量。
+
