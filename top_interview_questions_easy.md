@@ -156,3 +156,18 @@ class Solution:
 * 时间复杂度：$O(n)$，其中 $n$ 为序列长度。每个位置至多被遍历两次。
 * 空间复杂度：$O(1)$。只需要常数的空间存放若干变量。
 
+### [Two Sum](https://leetcode.cn/problems/two-sum/)
+
+```python
+class Solution:
+    def twoSum(self, nums: List[int], target: int) -> List[int]:
+        res = dict()
+        for i, num in enumerate(nums):
+            if num in res:
+                return [res[num], i]
+            res[target - num] = i
+        return list()
+```
+
+* 时间复杂度：$O(N)$，其中 $N$ 是数组中的元素数量。对于每一个元素 x，我们可以 $O(1)$ 地寻找 target - x。
+* 空间复杂度：$O(N)$，其中 $N$ 是数组中的元素数量。主要为哈希表的开销。
