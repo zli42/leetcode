@@ -195,3 +195,25 @@ class Solution:
 
 * 时间复杂度：$O(1)$。数独共有 $81$ 个单元格，只需要对每个单元格遍历一次即可。
 * 空间复杂度：$O(1)$。由于数独的大小固定，因此哈希表的空间也是固定的。
+
+### [Rotate Image](https://leetcode.cn/problems/rotate-image/)
+
+```python
+class Solution:
+    def rotate(self, matrix: List[List[int]]) -> None:
+        """
+        Do not return anything, modify matrix in-place instead.
+        """
+        n = len(matrix)
+        # 水平翻转
+        for i in range(n // 2):
+            for j in range(n):
+                matrix[i][j], matrix[n - i - 1][j] = matrix[n - i - 1][j], matrix[i][j]
+        # 主对角线翻转
+        for i in range(n):
+            for j in range(i):
+                matrix[i][j], matrix[j][i] = matrix[j][i], matrix[i][j]
+```
+
+* 时间复杂度：$O(N^2)$，其中 $N$ 是 `matrix` 的边长。对于每一次翻转操作，我们都需要枚举矩阵中一半的元素。
+* 空间复杂度：$O(1)$。为原地翻转得到的原地旋转。
