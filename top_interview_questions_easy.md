@@ -171,3 +171,27 @@ class Solution:
 
 * 时间复杂度：$O(N)$，其中 $N$ 是数组中的元素数量。对于每一个元素 x，我们可以 $O(1)$ 地寻找 target - x。
 * 空间复杂度：$O(N)$，其中 $N$ 是数组中的元素数量。主要为哈希表的开销。
+
+# [Valid Sudoku](https://leetcode.cn/problems/valid-sudoku/)
+
+```python
+class Solution:
+    def isValidSudoku(self, board: List[List[str]]) -> bool:
+        row = [set() for _ in range(9)]
+        col = [set() for _ in range(9)]
+        cell = [set() for _ in range(9)]
+        for i in range(9):
+            for j in range(9):
+                n = board[i][j]
+                if n == ".":
+                    continue
+                if n in row[i] or n in col[j] or n in cell[i // 3 * 3 + j // 3]:
+                    return False
+                row[i].add(n)
+                col[j].add(n)
+                cell[i // 3 * 3 + j // 3].add(n)
+        return True
+```
+
+* 时间复杂度：$O(1)$。数独共有 $81$ 个单元格，只需要对每个单元格遍历一次即可。
+* 空间复杂度：$O(1)$。由于数独的大小固定，因此哈希表的空间也是固定的。
