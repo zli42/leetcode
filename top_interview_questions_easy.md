@@ -217,3 +217,24 @@ class Solution:
 
 * 时间复杂度：$O(N^2)$，其中 $N$ 是 `matrix` 的边长。对于每一次翻转操作，我们都需要枚举矩阵中一半的元素。
 * 空间复杂度：$O(1)$。为原地翻转得到的原地旋转。
+
+## Strings
+
+### [Reverse String](https://leetcode.cn/problems/reverse-string/)
+
+```python
+class Solution:
+    def reverseString(self, s: List[str]) -> None:
+        """
+        Do not return anything, modify s in-place instead.
+        """
+        i = 0
+        j = len(s) - 1
+        while i < j:
+            s[i], s[j] = s[j], s[i]
+            i += 1
+            j -= 1
+```
+
+* 时间复杂度：O(N)O(N)，其中 NN 为字符数组的长度。一共执行了 N/2N/2 次的交换。
+* 空间复杂度：O(1)O(1)。只使用了常数空间来存放若干变量。
