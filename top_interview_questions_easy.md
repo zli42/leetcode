@@ -172,7 +172,7 @@ class Solution:
 * 时间复杂度：$O(N)$，其中 $N$ 是数组中的元素数量。对于每一个元素 x，我们可以 $O(1)$ 地寻找 target - x。
 * 空间复杂度：$O(N)$，其中 $N$ 是数组中的元素数量。主要为哈希表的开销。
 
-# [Valid Sudoku](https://leetcode.cn/problems/valid-sudoku/)
+### [Valid Sudoku](https://leetcode.cn/problems/valid-sudoku/)
 
 ```python
 class Solution:
@@ -236,5 +236,58 @@ class Solution:
             j -= 1
 ```
 
-* 时间复杂度：O(N)O(N)，其中 NN 为字符数组的长度。一共执行了 N/2N/2 次的交换。
-* 空间复杂度：O(1)O(1)。只使用了常数空间来存放若干变量。
+* 时间复杂度：$O(N)$，其中 $N$ 为字符数组的长度。一共执行了 $N/2$ 次的交换。
+* 空间复杂度：$O(1)$。只使用了常数空间来存放若干变量。
+
+### [Reverse Integer](https://leetcode.cn/problems/reverse-integer/)
+
+## Linked List
+
+## Trees
+
+### [Maximum Depth of Binary Tree](https://leetcode.cn/problems/maximum-depth-of-binary-tree/)
+
+DFS
+
+```python
+class Solution:
+    def maxDepth(self, root):
+        if root is None: 
+            return 0 
+        else: 
+            left_height = self.maxDepth(root.left) 
+            right_height = self.maxDepth(root.right) 
+            return max(left_height, right_height) + 1 
+```
+
+* 时间复杂度：$O(n)$，其中 $n$ 为二叉树节点的个数。每个节点在递归中只被遍历一次。
+* 空间复杂度：$O(height)$，其中 `height` 表示二叉树的高度。递归函数需要栈空间，而栈空间取决于递归的深度，因此空间复杂度等价于二叉树的高度。
+
+BFS
+```python
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def maxDepth(self, root: Optional[TreeNode]) -> int:
+        if not root:
+            return 0
+        
+        queue = [root]
+        depth = 0
+        while queue:
+            for i in range(len(queue)):
+                node = queue.pop(0)
+                if node.left:
+                    queue.append(node.left)
+                if node.right:
+                    queue.append(node.right)
+            depth += 1
+        return depth
+```
+
+* 时间复杂度：$O(n)$，其中 $n$ 为二叉树的节点个数。与方法一同样的分析，每个节点只会被访问一次。
+* 空间复杂度：此方法空间的消耗取决于队列存储的元素数量，其在最坏情况下会达到 $O(n)$。
