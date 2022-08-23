@@ -290,6 +290,31 @@ class Solution:
 * 时间复杂度：$O(n)$，其中 $n$ 是字符串 $s$ 的长度。第一次遍历字符串的时间复杂度为 $O(n)$，第二次遍历哈希映射的时间复杂度为 $O(|\Sigma|)$，由于 $s$ 包含的字符种类数一定小于 $s$ 的长度，因此 $O(|\Sigma|)$ 在渐进意义下小于 $O(n)$，可以忽略。
 * 空间复杂度：$O(|\Sigma|)$，其中 $\Sigma$ 是字符集，在本题中 $s$ 只包含小写字母，因此 $|\Sigma| \leq 26$。我们需要 $O(|\Sigma|)$ 的空间存储哈希映射。
 
+### [Valid Anagram](https://leetcode.cn/problems/valid-anagram/)
+
+```python
+class Solution:
+    def isAnagram(self, s: str, t: str) -> bool:
+        if len(s) != len(t):
+            return False
+        
+        counter = dict()
+        for c in s:
+            counter[c] = counter.get(c, 0) + 1
+        for c in t:
+            counter[c] = counter.get(c, 0) - 1
+            if counter[c] < 0:
+                return False
+        return True
+```
+
+* 时间复杂度：$O(n)$，其中 $n$ 为 $s$ 的长度。
+* 空间复杂度：$O(S)$，其中 $S$ 为字符集大小，此处 $S=26$。
+
+
+
+
+
 ## Linked List
 
 ## Trees
