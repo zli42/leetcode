@@ -266,6 +266,30 @@ class Solution:
 * 时间复杂度：$O(log∣x∣)$。翻转的次数即 $x$ 十进制的位数。
 * 空间复杂度：$O(1)$。
 
+### [First Unique Character in a String](https://leetcode.cn/problems/first-unique-character-in-a-string/)
+
+```python
+class Solution:
+    def firstUniqChar(self, s: str) -> int:
+        position = dict()
+        for i, c in enumerate(s):
+            if c in position:
+                position[c] = -1
+            else:
+                position[c] = i
+        n = len(s)
+        first = n
+        for p in position.values():
+            if p != -1 and p < first:
+                first = p
+        if first == n:
+            first = -1
+        return first
+```
+
+* 时间复杂度：$O(n)$，其中 $n$ 是字符串 $s$ 的长度。第一次遍历字符串的时间复杂度为 $O(n)$，第二次遍历哈希映射的时间复杂度为 $O(|\Sigma|)$，由于 $s$ 包含的字符种类数一定小于 $s$ 的长度，因此 $O(|\Sigma|)$ 在渐进意义下小于 $O(n)$，可以忽略。
+* 空间复杂度：$O(|\Sigma|)$，其中 $\Sigma$ 是字符集，在本题中 $s$ 只包含小写字母，因此 $|\Sigma| \leq 26$。我们需要 $O(|\Sigma|)$ 的空间存储哈希映射。
+
 ## Linked List
 
 ## Trees
