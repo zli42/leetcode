@@ -679,3 +679,23 @@ class Solution:
 
 * 时间复杂度：$O(\log n)$，其中 $n$ 是给定版本的数量。
 * 空间复杂度：$O(1)$。我们只需要常数的空间保存若干变量。
+
+## Dynamic Programming
+
+### [Climbing Stairs](https://leetcode.cn/problems/climbing-stairs/)
+
+```python
+class Solution:
+    def climbStairs(self, n: int) -> int:
+        p = 0
+        q = 0
+        r = 1
+        for _ in range(n):
+            p = q
+            q = r
+            r = p + q
+        return r
+```
+
+* 时间复杂度：循环执行 $n$ 次，每次花费常数的时间代价，故渐进时间复杂度为 $O(n)$。
+* 空间复杂度：这里只用了常数个变量作为辅助空间，故渐进空间复杂度为 $O(1)$。
