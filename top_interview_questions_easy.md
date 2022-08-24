@@ -468,13 +468,7 @@ class Solution:
             if val <= lower or val >= upper:
                 return False
 
-            if not helper(node.left, lower, val):
-                return False
-
-            if not helper(node.right, val, upper):
-                return False
-
-            return True
+            return helper(node.left, lower, val) and helper(node.right, val, upper)
 
         return helper(root)
 ```
@@ -537,13 +531,7 @@ class Solution:
             if node1.val != node2.val:
                 return False
 
-            if not check(node1.left, node2.right):
-                return False
-
-            if not check(node1.right, node2.left):
-                return False
-
-            return True
+            return check(node1.left, node2.right) and check(node1.right, node2.left)
 
         return check(root, root)
 ```
@@ -583,3 +571,35 @@ class Solution:
 
 * 时间复杂度：这里遍历了这棵树，渐进时间复杂度为 $O(n)$。
 * 空间复杂度：这里需要用一个队列来维护节点，每个节点最多进队一次，出队一次，队列中最多不会超过 $n$ 个点，故渐进空间复杂度为 $O(n)$。
+
+### [Binary Tree Level Order Traversal](https://leetcode.cn/problems/binary-tree-level-order-traversal/)
+
+```python
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def levelOrder(self, root: Optional[TreeNode]) -> List[List[int]]:
+        res = []
+        if not root:
+            return res
+
+        queue = [root]
+        while queue:
+            level = []
+            for _ in range(len(queue)):
+                node = queue.pop(0)
+                level.append(node.val)
+                if node.left:
+                    queue.append(node.left)
+                if node.right:
+                    queue.append(node.right)
+            res.append(level)
+        return res
+```
+
+* 时间复杂度：每个点进队出队各一次，故渐进时间复杂度为 $O(n)$。
+* 空间复杂度：队列中元素的个数不超过 $n$ 个，故渐进空间复杂度为 $O(n)$。
