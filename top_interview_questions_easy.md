@@ -385,6 +385,10 @@ class Solution:
 * 时间复杂度：$O(n)$，其中 $n$ 为字符串的长度。我们只需要依次处理所有的字符，处理每个字符需要的时间为 $O(1)$。
 * 空间复杂度：$O(1)$。自动机的状态只需要常数空间存储。
 
+### [Implement strStr()](https://leetcode.cn/problems/implement-strstr/)
+
+KMP
+
 
 ## Linked List
 
@@ -442,3 +446,70 @@ class Solution:
 
 * 时间复杂度：$O(n)$，其中 $n$ 为二叉树的节点个数。与方法一同样的分析，每个节点只会被访问一次。
 * 空间复杂度：此方法空间的消耗取决于队列存储的元素数量，其在最坏情况下会达到 $O(n)$。
+
+### [Validate Binary Search Tree](https://leetcode.cn/problems/validate-binary-search-tree/)
+
+DFS
+
+```python
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def isValidBST(self, root: Optional[TreeNode]) -> bool:
+        def helper(node, lower=float('-inf'), upper=float('inf')):
+            if not node:
+                return True
+
+            val = node.val
+            if val <= lower or val >= upper:
+                return False
+
+            if not helper(node.left, lower, val):
+                return False
+
+            if not helper(node.right, val, upper):
+                return False
+
+            return True
+
+        return helper(root)
+```
+
+* 时间复杂度：$O(n)$，其中 $n$ 为二叉树的节点个数。在递归调用的时候二叉树的每个节点最多被访问一次，因此时间复杂度为 $O(n)$。
+* 空间复杂度：$O(n)$，其中 $n$ 为二叉树的节点个数。递归函数在递归过程中需要为每一层递归函数分配栈空间，所以这里需要额外的空间且该空间取决于递归的深度，即二叉树的高度。最坏情况下二叉树为一条链，树的高度为 $n$ ，递归最深达到 $n$ 层，故最坏情况下空间复杂度为 $O(n)$ 。
+
+BFS
+
+```python
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def isValidBST(self, root: Optional[TreeNode]) -> bool:
+        stack = []
+        inorder = float("-inf")
+
+        while stack or root:
+            while root:
+                stack.append(root)
+                root = root.left
+
+            root = stack.pop()
+            if root.val <= inorder:
+                return False
+
+            inorder = root.val
+            root = root.right
+
+        return True
+```
+
+* 时间复杂度：$O(n)$，其中 $n$ 为二叉树的节点个数。二叉树的每个节点最多被访问一次，因此时间复杂度为 $O(n)$。
+* 空间复杂度：$O(n)$，其中 $n$ 为二叉树的节点个数。栈最多存储 $n$ 个节点，因此需要额外的 $O(n)$ 的空间。
