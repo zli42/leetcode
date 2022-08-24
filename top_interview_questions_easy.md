@@ -513,3 +513,73 @@ class Solution:
 
 * 时间复杂度：$O(n)$，其中 $n$ 为二叉树的节点个数。二叉树的每个节点最多被访问一次，因此时间复杂度为 $O(n)$。
 * 空间复杂度：$O(n)$，其中 $n$ 为二叉树的节点个数。栈最多存储 $n$ 个节点，因此需要额外的 $O(n)$ 的空间。
+
+### [Symmetric Tree](https://leetcode.cn/problems/symmetric-tree/)
+
+DFS
+
+```python
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def isSymmetric(self, root: Optional[TreeNode]) -> bool:
+        def check(node1, node2):
+            if node1 is None and node2 is None:
+                return True
+
+            if node1 is None or node2 is None:
+                return False
+
+            if node1.val != node2.val:
+                return False
+
+            if not check(node1.left, node2.right):
+                return False
+
+            if not check(node1.right, node2.left):
+                return False
+
+            return True
+
+        return check(root, root)
+```
+
+假设树上一共 $n$ 个节点。
+* 时间复杂度：这里遍历了这棵树，渐进时间复杂度为 $O(n)$。
+* 空间复杂度：这里的空间复杂度和递归使用的栈空间有关，这里递归层数不超过 $n$，故渐进空间复杂度为 $O(n)$。
+
+BFS
+
+```python
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def isSymmetric(self, root: Optional[TreeNode]) -> bool:
+        queue = [(root, root)]
+        while queue:
+            node1, node2 = queue.pop()
+            if node1 is None and node2 is None:
+                continue
+
+            if node1 is None or node2 is None:
+                return False
+
+            if node1.val != node2.val:
+                return False
+
+            queue.append((node1.left, node2.right))
+            queue.append((node1.right, node2.left))
+
+        return True
+```
+
+* 时间复杂度：这里遍历了这棵树，渐进时间复杂度为 $O(n)$。
+* 空间复杂度：这里需要用一个队列来维护节点，每个节点最多进队一次，出队一次，队列中最多不会超过 $n$ 个点，故渐进空间复杂度为 $O(n)$。
