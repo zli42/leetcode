@@ -699,3 +699,19 @@ class Solution:
 
 * 时间复杂度：循环执行 $n$ 次，每次花费常数的时间代价，故渐进时间复杂度为 $O(n)$。
 * 空间复杂度：这里只用了常数个变量作为辅助空间，故渐进空间复杂度为 $O(1)$。
+
+### [Best Time to Buy and Sell Stock](https://leetcode.cn/problems/best-time-to-buy-and-sell-stock/)
+
+```python
+class Solution:
+    def maxProfit(self, prices: List[int]) -> int:
+        maxprofit = 0
+        minprice = prices[0]
+        for price in prices:
+            maxprofit = max(price - minprice, maxprofit)
+            minprice = min(price, minprice)
+        return maxprofit
+```
+
+* 时间复杂度：$O(n)$，只需要遍历一次。
+* 空间复杂度：$O(1)$，只使用了常数个变量。
