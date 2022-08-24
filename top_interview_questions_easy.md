@@ -603,3 +603,31 @@ class Solution:
 
 * 时间复杂度：每个点进队出队各一次，故渐进时间复杂度为 $O(n)$。
 * 空间复杂度：队列中元素的个数不超过 $n$ 个，故渐进空间复杂度为 $O(n)$。
+
+### [Convert Sorted Array to Binary Search Tree](https://leetcode.cn/problems/convert-sorted-array-to-binary-search-tree/)
+
+```python
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def sortedArrayToBST(self, nums: List[int]) -> Optional[TreeNode]:
+        def helper(left, right):
+            if left >= right:
+                return None
+
+            mid = (left + right) // 2
+
+            root = TreeNode(nums[mid])
+            root.left = helper(left, mid)
+            root.right = helper(mid + 1, right)
+            return root
+
+        return helper(0, len(nums))
+```
+
+* 时间复杂度：$O(n)$，其中 $n$ 是数组的长度。每个数字只访问一次。
+* 空间复杂度：$O(\log{n})$，其中 $n$ 是数组的长度。空间复杂度不考虑返回值，因此空间复杂度主要取决于递归栈的深度，递归栈的深度是 $O(\log{n})$。
