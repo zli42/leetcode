@@ -715,3 +715,19 @@ class Solution:
 
 * 时间复杂度：$O(n)$，只需要遍历一次。
 * 空间复杂度：$O(1)$，只使用了常数个变量。
+
+### [Maximum Subarray](https://leetcode.cn/problems/maximum-subarray/)
+
+```python
+class Solution:
+    def maxSubArray(self, nums: List[int]) -> int:
+        pre = 0
+        res = nums[0]
+        for num in nums:
+            pre = max(num, pre + num)
+            res = max(res, pre)
+        return res
+```
+
+* 时间复杂度：$O(n)$，其中 $n$ 为 `nums` 数组的长度。我们只需要遍历一遍数组即可求得答案。
+* 空间复杂度：$O(1)$。我们只需要常数空间存放若干变量。
