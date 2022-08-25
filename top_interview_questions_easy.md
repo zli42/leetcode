@@ -731,3 +731,25 @@ class Solution:
 
 * 时间复杂度：$O(n)$，其中 $n$ 为 `nums` 数组的长度。我们只需要遍历一遍数组即可求得答案。
 * 空间复杂度：$O(1)$。我们只需要常数空间存放若干变量。
+
+### [House Robber](https://leetcode.cn/problems/house-robber/)
+
+```python
+class Solution:
+    def rob(self, nums: List[int]) -> int:
+        if not nums:
+            return 0
+
+        size = len(nums)
+        if size == 1:
+            return nums[0]
+        
+        first, second = nums[0], max(nums[0], nums[1])
+        for i in range(2, size):
+            first, second = second, max(first + nums[i], second)
+        
+        return second
+```
+
+* 时间复杂度：$O(n)$，其中 $n$ 是数组长度。只需要对数组遍历一次。
+* 空间复杂度：$O(1)$。使用滚动数组，可以只存储前两间房屋的最高总金额，而不需要存储整个数组的结果，因此空间复杂度是 $O(1)$。
