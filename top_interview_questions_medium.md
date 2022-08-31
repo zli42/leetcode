@@ -89,6 +89,20 @@ class Solution:
 * 时间复杂度：$O(mn)$，其中 $m$ 是矩阵的行数，$n$ 是矩阵的列数。我们至多只需要遍历该矩阵两次。
 * 空间复杂度：$O(1)$。我们只需要常数空间存储若干变量。
 
+### [Group Anagrams](https://leetcode.cn/problems/group-anagrams/)
+
+```python
+class Solution:
+    def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
+        res = dict()
+        for item in strs:
+            key = ''.join(sorted(item))
+            res[key] = res.get(key, []) + [item]
+        return list(res.values())
+```
+
+* 时间复杂度：$O(nk \log k)$，其中 $n$ 是 `strs` 中的字符串的数量，$k$ 是 `strs` 中的字符串的的最大长度。需要遍历 $n$ 个字符串，对于每个字符串，需要 $O(k \log k)$ 的时间进行排序以及 $O(1)$ 的时间更新哈希表，因此总时间复杂度是 $O(nk \log k)$。
+* 空间复杂度：$O(nk)$，其中 $n$ 是 `strs` 中的字符串的数量，$k$ 是 $strs$ 中的字符串的的最大长度。需要用哈希表存储全部字符串。
 
 
 
