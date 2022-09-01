@@ -104,8 +104,29 @@ class Solution:
 * 时间复杂度：$O(nk \log k)$，其中 $n$ 是 `strs` 中的字符串的数量，$k$ 是 `strs` 中的字符串的的最大长度。需要遍历 $n$ 个字符串，对于每个字符串，需要 $O(k \log k)$ 的时间进行排序以及 $O(1)$ 的时间更新哈希表，因此总时间复杂度是 $O(nk \log k)$。
 * 空间复杂度：$O(nk)$，其中 $n$ 是 `strs` 中的字符串的数量，$k$ 是 $strs$ 中的字符串的的最大长度。需要用哈希表存储全部字符串。
 
+### [Longest Substring Without Repeating Characters](https://leetcode.cn/problems/longest-substring-without-repeating-characters/)
 
+```python
+class Solution:
+    def lengthOfLongestSubstring(self, s: str) -> int:
+        n = len(s)
+        if n < 2:
+            return n
+        
+        t = set(s[0])
+        right = 1
+        res = 0
+        for left in range(n):
+            while right < n and s[right] not in t:
+                t.add(s[right])
+                right += 1
+            t.remove(s[left])
+            res = max(res, right - left)
+        return res
+```
 
+* 时间复杂度：$O(N)$，其中 $N$ 是字符串的长度。左指针和右指针分别会遍历整个字符串一次。
+* 空间复杂度：$O(|\Sigma|)$，其中 $\Sigma$ 表示字符集（即字符串中可以出现的字符），$|\Sigma|$ 表示字符集的大小。在本题中没有明确说明字符集，因此可以默认为所有 ASCII 码在 $[0, 128)$ 内的字符，即 $|\Sigma| = 128$。我们需要用到哈希集合来存储出现过的字符，而字符最多有 $|\Sigma|$ 个，因此空间复杂度为 $O(|\Sigma|)$。
 
 
 ## Tree and Graphs
