@@ -128,6 +128,35 @@ class Solution:
 * 时间复杂度：$O(N)$，其中 $N$ 是字符串的长度。左指针和右指针分别会遍历整个字符串一次。
 * 空间复杂度：$O(|\Sigma|)$，其中 $\Sigma$ 表示字符集（即字符串中可以出现的字符），$|\Sigma|$ 表示字符集的大小。在本题中没有明确说明字符集，因此可以默认为所有 ASCII 码在 $[0, 128)$ 内的字符，即 $|\Sigma| = 128$。我们需要用到哈希集合来存储出现过的字符，而字符最多有 $|\Sigma|$ 个，因此空间复杂度为 $O(|\Sigma|)$。
 
+### [Longest Palindromic Substring](https://leetcode.cn/problems/longest-palindromic-substring/)
+
+```python
+class Solution:
+    def longestPalindrome(self, s: str) -> str:
+        n = len(s)
+        def expandAroundCenter(left, right):
+            while left >= 0 and right < n and s[left] == s[right]:
+                left -= 1
+                right += 1
+            return left + 1, right - 1
+        
+        start = 0
+        end = 0
+        for i in range(n):
+            left1, right1 = expandAroundCenter(i, i)
+            if right1 - left1 > end - start:
+                start = left1
+                end = right1
+            left2, right2 = expandAroundCenter(i, i+1)
+            if right2 - left2 > end - start:
+                start = left2
+                end = right2
+        return s[start:end+1]
+```
+
+* 时间复杂度：$O(n^2)$，其中 $n$ 是字符串的长度。长度为 $1$ 和 $2$ 的回文中心分别有 $n$ 和 $n-1$ 个，每个回文中心最多会向外扩展 $O(n)$ 次。
+* 空间复杂度：$O(1)$。
+
 
 ## Tree and Graphs
 
