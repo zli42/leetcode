@@ -157,6 +157,32 @@ class Solution:
 * 时间复杂度：$O(n^2)$，其中 $n$ 是字符串的长度。长度为 $1$ 和 $2$ 的回文中心分别有 $n$ 和 $n-1$ 个，每个回文中心最多会向外扩展 $O(n)$ 次。
 * 空间复杂度：$O(1)$。
 
+### [Increasing Triplet Subsequence](https://leetcode.cn/problems/increasing-triplet-subsequence/)
+
+```python
+class Solution:
+    def increasingTriplet(self, nums: List[int]) -> bool:
+        n = len(nums)
+        if n < 3:
+            return False
+        
+        first = nums[0]
+        second = float('inf')
+        for i in range(1, n):
+            third = nums[i]
+            if third > second:
+                return True
+            
+            if third > first:
+                second = third
+            else:
+                first = third
+        return False
+```
+
+* 时间复杂度：$O(n)$，其中 $n$ 是数组 `nums` 的长度。需要遍历数组一次。
+* 空间复杂度：$O(1)$。
+
 
 ## Tree and Graphs
 
