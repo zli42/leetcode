@@ -183,6 +183,32 @@ class Solution:
 * 时间复杂度：$O(n)$，其中 $n$ 是数组 `nums` 的长度。需要遍历数组一次。
 * 空间复杂度：$O(1)$。
 
+### [Count and Say](https://leetcode.cn/problems/count-and-say/)
+
+```python
+class Solution:
+    def countAndSay(self, n: int) -> str:
+        res = [1]
+        for _ in range(1, n):
+            cur = []
+            pos = 0
+            m = len(res)
+            while pos < m:
+                cnt = 0
+                dig = res[pos]
+                while pos < m and res[pos] == dig:
+                    cnt += 1
+                    pos += 1
+                cur.append(cnt)
+                cur.append(dig)
+            res = cur
+        return ''.join(str(e) for e in res)
+```
+
+* 时间复杂度：$O(N \times M)$，其中 $N$ 为给定的正整数，$M$ 为生成的字符串中的最大长度。
+* 空间复杂度：O$(M)$。其中 $M$ 为生成的字符串中的最大长度。
+
+
 
 ## Tree and Graphs
 
