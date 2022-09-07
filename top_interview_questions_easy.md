@@ -418,7 +418,24 @@ class Solution:
 * 时间复杂度：$O(n+m)$，其中 $n$ 是字符串 `haystack` 的长度，$m$ 是字符串 `needle` 的长度。我们至多需要遍历两字符串一次。
 * 空间复杂度：$O(m)$，其中 $m$ 是字符串 `needle` 的长度。我们只需要保存字符串 `needle` 的前缀函数。
 
+### [Longest Common Prefix](https://leetcode.cn/problems/longest-common-prefix/)
 
+```python
+class Solution:
+    def longestCommonPrefix(self, strs: List[str]) -> str:
+        prefix = strs[0]
+        for i in range(1, len(strs)):
+            j = 0
+            while j < min(len(prefix), len(strs[i])) and prefix[j] == strs[i][j]:
+                j += 1
+            prefix = prefix[:j]
+            if j == 0:
+                break
+        return prefix
+```
+
+* 时间复杂度：$O(mn)$，其中 $m$ 是字符串数组中的字符串的平均长度，$n$ 是字符串的数量。最坏情况下，字符串数组中的每个字符串的每个字符都会被比较一次。
+* 空间复杂度：$O(1)$。使用的额外空间复杂度为常数。
 
 ## Linked List
 
