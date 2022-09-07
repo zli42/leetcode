@@ -387,7 +387,37 @@ class Solution:
 
 ### [Implement strStr()](https://leetcode.cn/problems/implement-strstr/)
 
-KMP
+```python
+class Solution:
+    def strStr(self, haystack: str, needle: str) -> int:
+        n = len(haystack)
+        m = len(needle)
+        if m == 0:
+            return 0
+        
+        next_array = [0 for _ in range(m)]
+        j = 0
+        for i in range(1, m):
+            while j > 0 and needle[i] != needle[j]:
+                j = next_array[j - 1]
+            if needle[i] == needle[j]:
+                j += 1
+            next_array[i] = j
+            
+        j = 0
+        for i in range(n):
+            while j > 0 and haystack[i] != needle[j]:
+                j = next_array[j - 1]
+            if haystack[i] == needle[j]:
+                j += 1
+            if j == m:
+                return i - m + 1
+        return -1
+```
+
+* 时间复杂度：$O(n+m)$，其中 $n$ 是字符串 `haystack` 的长度，$m$ 是字符串 `needle` 的长度。我们至多需要遍历两字符串一次。
+* 空间复杂度：$O(m)$，其中 $m$ 是字符串 `needle` 的长度。我们只需要保存字符串 `needle` 的前缀函数。
+
 
 
 ## Linked List
