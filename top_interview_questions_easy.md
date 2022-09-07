@@ -437,8 +437,6 @@ class Solution:
 * 时间复杂度：$O(mn)$，其中 $m$ 是字符串数组中的字符串的平均长度，$n$ 是字符串的数量。最坏情况下，字符串数组中的每个字符串的每个字符都会被比较一次。
 * 空间复杂度：$O(1)$。使用的额外空间复杂度为常数。
 
-## Linked List
-
 ## Trees
 
 ### [Maximum Depth of Binary Tree](https://leetcode.cn/problems/maximum-depth-of-binary-tree/)
