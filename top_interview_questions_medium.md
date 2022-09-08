@@ -208,9 +208,58 @@ class Solution:
 * 时间复杂度：$O(N \times M)$，其中 $N$ 为给定的正整数，$M$ 为生成的字符串中的最大长度。
 * 空间复杂度：O$(M)$。其中 $M$ 为生成的字符串中的最大长度。
 
-
-
 ## Tree and Graphs
+
+### [Binary Tree Inorder Traversal](https://leetcode.cn/problems/binary-tree-inorder-traversal/)
+
+DFS
+
+```python
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution(object):
+	def inorderTraversal(self, root):
+		res = []
+		def dfs(node):
+			if not node:
+				return
+			dfs(node.left)
+			res.append(node.val)
+			dfs(node.right)
+		dfs(root)
+		return res
+```
+
+* 时间复杂度：$O(n)$，其中 $n$ 为二叉树节点的个数。二叉树的遍历中每个节点会被访问一次且只会被访问一次。
+* 空间复杂度：$O(n)$。空间复杂度取决于递归的栈深度，而栈深度在二叉树为一条链的情况下会达到 $O(n)$ 的级别。
+
+BFS
+
+```python
+class Solution:
+    def inorderTraversal(self, root: TreeNode) -> List[int]:
+        NEW_NODE, VISITED_NODE = False, True
+        res = []
+        stack = [(NEW_NODE, root)]
+        while stack:
+            state, node = stack.pop()
+            if node is None: continue
+            if state == NEW_NODE:
+                stack.append((NEW_NODE, node.right))
+                stack.append((VISITED_NODE, node))
+                stack.append((NEW_NODE, node.left))
+            else:
+                res.append(node.val)
+        return res
+```
+
+* 时间复杂度：$O(n)$。
+* 空间复杂度：$O(n)$。
+
 
 ## Sorting and Searching
 
