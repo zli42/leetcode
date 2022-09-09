@@ -260,6 +260,43 @@ class Solution:
 * 时间复杂度：$O(n)$。
 * 空间复杂度：$O(n)$。
 
+### [Binary Tree Zigzag Level Order Traversal](https://leetcode.cn/problems/binary-tree-zigzag-level-order-traversal/)
+
+```python
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def zigzagLevelOrder(self, root: Optional[TreeNode]) -> List[List[int]]:
+        if not root:
+            return []
+        
+        res = []
+        level = 0
+        queue = [root]
+        while queue:
+            tmp = collections.deque()
+            for _ in range(len(queue)):
+                node = queue.pop(0)
+                if level % 2 == 0:
+                    tmp.append(node.val)
+                else:
+                    tmp.appendleft(node.val)
+                if node.left:
+                    queue.append(node.left)
+                if node.right:
+                    queue.append(node.right)
+            res.append(tmp)
+            level += 1
+        return res
+```
+
+* 时间复杂度：$O(N)$，其中 $N$ 为二叉树的节点数。每个节点会且仅会被遍历一次。
+* 空间复杂度：$O(N)$。我们需要维护存储节点的队列和存储节点值的双端队列，空间复杂度为 $O(N)$。
+
 
 ## Sorting and Searching
 
