@@ -387,6 +387,40 @@ class Solution:
 * 时间复杂度：$O(N)$，每个节点只访问一次。
 * 空间复杂度：$O(1)$，不需要存储额外的节点。
 
+### [Kth Smallest Element in a BST](https://leetcode.cn/problems/kth-smallest-element-in-a-bst/)
+
+```python
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def kthSmallest(self, root: Optional[TreeNode], k: int) -> int:
+        res = []
+        NEW = True
+        VISITED = False
+        stack = [(NEW, root)]
+        while stack:
+            state, node = stack.pop()
+            if not node:
+                continue
+            if state == NEW:
+                stack.append((NEW, node.right))
+                stack.append((VISITED, node))
+                stack.append((NEW, node.left))
+            else:
+                res.append(node.val)
+                if len(res) == k:
+                    return node.val
+        return None
+```
+
+* 时间复杂度：$O(H+k)$，其中 $H$ 是树的高度。在开始遍历之前，我们需要 $O(H)$ 到达叶结点。当树是平衡树时，时间复杂度取得最小值 $O(\log N + k)$；当树是线性树（树中每个结点都只有一个子结点或没有子结点）时，时间复杂度取得最大值 $O(N+k)$。
+* 空间复杂度：$O(H)$，栈中最多需要存储 $H$ 个元素。当树是平衡树时，空间复杂度取得最小值 $O(\log N)$；当树是线性树时，空间复杂度取得最大值 $O(N)$。
+
+
 ## Sorting and Searching
 
 ## Dynamic Programming
