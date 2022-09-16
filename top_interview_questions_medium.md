@@ -420,6 +420,60 @@ class Solution:
 * 时间复杂度：$O(H+k)$，其中 $H$ 是树的高度。在开始遍历之前，我们需要 $O(H)$ 到达叶结点。当树是平衡树时，时间复杂度取得最小值 $O(\log N + k)$；当树是线性树（树中每个结点都只有一个子结点或没有子结点）时，时间复杂度取得最大值 $O(N+k)$。
 * 空间复杂度：$O(H)$，栈中最多需要存储 $H$ 个元素。当树是平衡树时，空间复杂度取得最小值 $O(\log N)$；当树是线性树时，空间复杂度取得最大值 $O(N)$。
 
+### [Number of Islands](https://leetcode.cn/problems/number-of-islands/)
+
+DFS
+
+```python
+class Solution:
+    def numIslands(self, grid: List[List[str]]) -> int:
+        def dfs(grid, r, c):
+            grid[r][c] = '2'
+            for x, y in [(r+1, c), (r-1, c), (r, c+1), (r, c-1)]:
+                if 0 <= x < len(grid) and 0 <= y < len(grid[0]) and grid[x][y] == '1':
+                    dfs(grid, x, y)
+                    
+        num_islands = 0
+        for r in range(len(grid)):
+            for c in range(len(grid[0])):
+                if grid[r][c] == '1':
+                    num_islands += 1
+                    dfs(grid, r, cO)
+                    
+        return num_islands
+```
+
+* 时间复杂度：$O(MN)$，其中 $M$ 和 $N$ 分别为行数和列数。
+* 空间复杂度：$O(MN)$，在最坏情况下，整个网格均为陆地，深度优先搜索的深度达到 $MN$。
+
+BFS
+
+```python
+class Solution:
+    def numIslands(self, grid: List[List[str]]) -> int:
+        num_islands = 0
+        for r in range(len(grid)):
+            for c in range(len(grid[0])):
+                if grid[r][c] == '1':
+                    num_islands += 1
+                    grid[r][c] = '2'
+                    neighbors = collections.deque([(r, c)])
+                    while neighbors:
+                        row, col = neighbors.popleft()
+                        for x, y in [(row+1, col), (row-1, col), (row, col+1), (row, col-1)]:
+                            if 0 <= x < len(grid) and 0 <= y < len(grid[0]) and grid[x][y] == '1':
+                                neighbors.append((x, y))
+                                grid[x][y] = '2'
+                    
+        return num_islands
+```
+
+* 时间复杂度：$O(MN)$，其中 $M$ 和 $N$ 分别为行数和列数。
+* 空间复杂度：$O(\min(M, N))$，在最坏情况下，整个网格均为陆地，队列的大小可以达到 $\min(M, N)$。
+
+
+
+
 
 ## Sorting and Searching
 
