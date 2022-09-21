@@ -471,10 +471,32 @@ class Solution:
 * 时间复杂度：$O(MN)$，其中 $M$ 和 $N$ 分别为行数和列数。
 * 空间复杂度：$O(\min(M, N))$，在最坏情况下，整个网格均为陆地，队列的大小可以达到 $\min(M, N)$。
 
-
-
-
-
 ## Sorting and Searching
+
+### [Sort Colors](https://leetcode.cn/problems/sort-colors/)
+
+```python
+class Solution:
+    def sortColors(self, nums: List[int]) -> None:
+        """
+        Do not return anything, modify nums in-place instead.
+        """
+        p0 = 0
+        p1 = 0
+        for i in range(len(nums)):
+            if nums[i] == 1:
+                nums[i], nums[p1] = nums[p1], nums[i]
+                p1 += 1
+            elif nums[i] ==0:
+                nums[i], nums[p0] = nums[p0], nums[i]
+                if p0 < p1:
+                    nums[i], nums[p1] = nums[p1], nums[i]
+                p0 += 1
+                p1 += 1
+```
+
+* 时间复杂度：$O(n)$，其中 $n$ 是数组 `nums` 的长度。
+* 空间复杂度：$O(1)$。
+        
 
 ## Dynamic Programming
