@@ -497,6 +497,30 @@ class Solution:
 
 * 时间复杂度：$O(n)$，其中 $n$ 是数组 `nums` 的长度。
 * 空间复杂度：$O(1)$。
+
+### [Top K Frequent Elements](https://leetcode.cn/problems/top-k-frequent-elements/)
+
+```python
+class Solution:
+    def topKFrequent(self, nums: List[int], k: int) -> List[int]:
+        counter = {}
+        for num in nums:
+            counter[num] = counter.get(num, 0) + 1
+
+        import heapq
+
+        heap = []
+        for num, cnt in counter.items():
+            if len(heap) < k:
+                heapq.heappush(heap, (cnt, num))
+            elif cnt > heap[0][0]:
+                heapq.heapreplace(heap, (cnt, num))
+
+        return [each[1] for each in heap]
+```
+
+* 时间复杂度：$O(N\log k)$，其中 $N$ 为数组的长度。我们首先遍历原数组，并使用哈希表记录出现次数，每个元素需要 $O(1)$ 的时间，共需 $O(N)$ 的时间。随后，我们遍历「出现次数数组」，由于堆的大小至多为 $k$，因此每次堆操作需要 $O(\log k)$ 的时间，共需 $O(N\log k)$ 的时间。二者之和为 $O(N\log k)$。
+* 空间复杂度：$O(N)$。哈希表的大小为 $O(N)$，而堆的大小为 $O(k)$，共计为 $O(N)$。
         
 
 ## Dynamic Programming
