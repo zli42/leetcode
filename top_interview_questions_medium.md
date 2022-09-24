@@ -521,6 +521,39 @@ class Solution:
 
 * 时间复杂度：$O(N\log k)$，其中 $N$ 为数组的长度。我们首先遍历原数组，并使用哈希表记录出现次数，每个元素需要 $O(1)$ 的时间，共需 $O(N)$ 的时间。随后，我们遍历「出现次数数组」，由于堆的大小至多为 $k$，因此每次堆操作需要 $O(\log k)$ 的时间，共需 $O(N\log k)$ 的时间。二者之和为 $O(N\log k)$。
 * 空间复杂度：$O(N)$。哈希表的大小为 $O(N)$，而堆的大小为 $O(k)$，共计为 $O(N)$。
+
+### [Kth Largest Element in an Array](https://leetcode.cn/problems/kth-largest-element-in-an-array/)
+
+```python
+class Solution:
+    def findKthLargest(self, nums: List[int], k: int) -> int:
+        import random
+
+        def quickFind(nums, k, left, right):
+            rand = random.randint(left, right)
+            nums[right], nums[rand] = nums[rand], nums[right]
+            pivot = nums[right]
+
+            i = left
+            for j in range(left, right):
+                if nums[j] <= pivot:
+                    nums[j], nums[i] = nums[i], nums[j]
+                    i += 1
+            nums[right], nums[i] = nums[i], nums[right]
+
+            if i == k:
+                return nums[i]
+            elif i < k:
+                return quickFind(nums, k, i + 1, right)
+            elif i > k:
+                return quickFind(nums, k, left, i - 1)
+
+        n = len(nums)
+        return quickFind(nums, n - k, 0, n - 1)
+```
+
+* 时间复杂度：$O(n)$。使用快速排序，平均时间复杂度是 $O(n \log n)$，最坏的时间代价是 $O(n ^ 2)$。把原来递归两个区间变成只递归一个区间，提高了时间效率。这就是「快速选择」算法。
+* 空间复杂度：$O(\log n)$，递归使用栈空间的空间代价的期望为 $O(\log n)$。
         
 
 ## Dynamic Programming
