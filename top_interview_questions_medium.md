@@ -554,6 +554,33 @@ class Solution:
 
 * 时间复杂度：$O(n)$。使用快速排序，平均时间复杂度是 $O(n \log n)$，最坏的时间代价是 $O(n ^ 2)$。把原来递归两个区间变成只递归一个区间，提高了时间效率。这就是「快速选择」算法。
 * 空间复杂度：$O(\log n)$，递归使用栈空间的空间代价的期望为 $O(\log n)$。
+
+### [Find Peak Element](https://leetcode.cn/problems/find-peak-element/)
+
+```python
+class Solution:
+    def findPeakElement(self, nums: List[int]) -> int:
+        def get(nums, i):
+            if i == -1 or i == len(nums):
+                return float('-inf')
+            return nums[i]
+        
+        left = 0
+        right = len(nums) - 1
+        while left <= right:
+            mid = (left + right) // 2
+            if get(nums, mid-1) < get(nums, mid) > get(nums, mid+1):
+                return mid
+            if get(nums, mid) < get(nums, mid-1):
+                right = mid - 1
+            else:
+                left = mid + 1
+```
+
+* 时间复杂度：$O(\log n)$，其中 $n$ 是数组 `nums` 的长度。
+* 空间复杂度：$O(1)$。
+
+
         
 
 ## Dynamic Programming
