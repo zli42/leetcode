@@ -600,6 +600,34 @@ class Solution:
 * 时间复杂度：$O(n\log n)$，其中 $n$ 为区间的数量。除去排序的开销，我们只需要一次线性扫描，所以主要的时间开销是排序的 $O(n\log n)$。
 * 空间复杂度：$O(\log n)$，其中 $n$ 为区间的数量。这里计算的是存储答案之外，使用的额外空间。$O(\log n)$ 即为排序所需要的空间复杂度。
 
+### [Search in Rotated Sorted Array](https://leetcode.cn/problems/search-in-rotated-sorted-array/)
+
+```python
+class Solution:
+    def search(self, nums: List[int], target: int) -> int:
+        l = 0
+        r = len(nums) - 1
+        while l <= r:
+            mid = (l + r) // 2
+            if nums[mid] == target:
+                return mid
+            
+            if nums[0] <= nums[mid]:
+                if nums[0] <= target < nums[mid]:
+                    r = mid - 1
+                else:
+                    l = mid + 1
+            else:
+                if nums[mid] < target <= nums[r]:
+                    l = mid + 1
+                else:
+                    r = mid - 1
+                    
+        return -1
+```
+
+* 时间复杂度： $O(\log n)$，其中 $n$ 为 `nums` 数组的大小。整个算法时间复杂度即为二分查找的时间复杂度 $O(\log n)$。
+* 空间复杂度： $O(1)$ 。我们只需要常数级别的空间存放变量。
         
 
 ## Dynamic Programming
