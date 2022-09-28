@@ -629,5 +629,26 @@ class Solution:
 * 时间复杂度： $O(\log n)$，其中 $n$ 为 `nums` 数组的大小。整个算法时间复杂度即为二分查找的时间复杂度 $O(\log n)$。
 * 空间复杂度： $O(1)$ 。我们只需要常数级别的空间存放变量。
         
+### [Search a 2D Matrix II](https://leetcode.cn/problems/search-a-2d-matrix-ii/)
+
+```python
+class Solution:
+    def searchMatrix(self, matrix: List[List[int]], target: int) -> bool:
+        x = 0
+        y = len(matrix[0]) - 1
+        while x < len(matrix) and y >= 0:
+            if matrix[x][y] == target:
+                return True
+            
+            if matrix[x][y] < target:
+                x += 1
+            else:
+                y -= 1
+                
+        return False
+```
+
+* 时间复杂度：$O(m+n)$。在搜索的过程中，如果我们没有找到 `target`，那么我们要么将 `y` 减少 `1`，要么将 `x` 增加 `1`。由于 `(x, y)` 的初始值分别为 `(0, n-1)`，因此 `y` 最多能被减少 `n` 次，`x` 最多能被增加 `m` 次，总搜索次数为 `m + n`。在这之后，`x` 和 `y` 就会超出矩阵的边界。
+* 空间复杂度：`O(1)`。
 
 ## Dynamic Programming
