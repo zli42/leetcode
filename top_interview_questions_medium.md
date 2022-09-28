@@ -652,3 +652,23 @@ class Solution:
 * 空间复杂度：`O(1)`。
 
 ## Dynamic Programming
+
+### [Jump Game](https://leetcode.cn/problems/jump-game/)
+
+```python
+class Solution:
+    def canJump(self, nums: List[int]) -> bool:
+        n = len(nums)
+        max_len = 0
+        
+        for i in range(n):
+            if i <= max_len:
+                max_len = max(max_len, i + nums[i])
+                if  max_len >= n - 1:
+                    return True
+                
+        return False
+```
+
+* 时间复杂度：$O(n)$，其中 $n$ 为数组的大小。只需要访问 `nums` 数组一遍，共 `n` 个位置。
+* 空间复杂度：$O(1)$，不需要额外的空间开销。
