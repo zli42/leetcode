@@ -672,3 +672,21 @@ class Solution:
 
 * 时间复杂度：$O(n)$，其中 $n$ 为数组的大小。只需要访问 `nums` 数组一遍，共 `n` 个位置。
 * 空间复杂度：$O(1)$，不需要额外的空间开销。
+
+### [ Coin Change](https://leetcode.cn/problems/coin-change/)
+
+```python
+class Solution:
+    def coinChange(self, coins: List[int], amount: int) -> int:
+        dp = [float('inf') for _ in range(amount + 1)]
+        dp[0] = 0
+        
+        for coin in coins:
+            for i in range(coin, amount + 1):
+                dp[i] = min(dp[i], dp[i - coin] + 1)
+                
+        return dp[amount] if dp[amount] != float('inf') else -1
+```
+
+* 时间复杂度：$O(Sn)$，其中 $S$ 是金额，$n$ 是面额数。我们一共需要计算 $O(S)$ 个状态，$S$ 为题目所给的总金额。对于每个状态，每次需要枚举 $n$ 个面额来转移状态，所以一共需要 $O(Sn)$ 的时间复杂度。
+* 空间复杂度：$O(S)$。数组 `dp` 需要开长度为总金额 $S$ 的空间。
