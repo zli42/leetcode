@@ -1,5 +1,6 @@
 ### [Remove Duplicates from Sorted Array](https://leetcode.cn/problems/remove-duplicates-from-sorted-array/)
 
+python
 ```python
 class Solution:
     def removeDuplicates(self, nums: List[int]) -> int:
@@ -11,6 +12,7 @@ class Solution:
         return j + 1
 ```
 
+rust
 ```rust
 impl Solution {
     pub fn remove_duplicates(nums: &mut Vec<i32>) -> i32 {
@@ -34,6 +36,7 @@ impl Solution {
 
 ### [Best Time to Buy and Sell Stock II](https://leetcode.cn/problems/best-time-to-buy-and-sell-stock-ii/)
 
+python
 ```python
 class Solution:
     def maxProfit(self, prices: List[int]) -> int:
@@ -50,6 +53,7 @@ class Solution:
 
 ### [Rotate Array](https://leetcode.cn/problems/rotate-array/)
 
+python
 ```python
 class Solution:
     def rotate(self, nums: List[int], k: int) -> None:
@@ -74,6 +78,7 @@ class Solution:
 
 ### [Contains Duplicate](https://leetcode.cn/problems/contains-duplicate/)
 
+python
 ```python
 class Solution:
     def containsDuplicate(self, nums: List[int]) -> bool:
@@ -95,6 +100,7 @@ class Solution:
 2. 任何数和其自身做异或运算，结果是 $0$，即 $a \oplus a=0$。
 3. 异或运算满足交换律和结合律，即 $a \oplus b \oplus a=b \oplus a \oplus a=b \oplus (a \oplus a)=b \oplus0=b$。
 
+python
 ```python
 class Solution:
     def singleNumber(self, nums: List[int]) -> int:
@@ -109,6 +115,7 @@ class Solution:
 
 ### [Intersection of Two Arrays II](https://leetcode.cn/problems/intersection-of-two-arrays-ii/)
 
+python
 ```python
 class Solution:
     def intersect(self, nums1: List[int], nums2: List[int]) -> List[int]:
@@ -128,6 +135,7 @@ class Solution:
         return intersection
 ```
 
+rust
 ```rust
 impl Solution {
     pub fn intersect(nums1: Vec<i32>, nums2: Vec<i32>) -> Vec<i32> {
@@ -161,6 +169,7 @@ impl Solution {
 
 ### [Plus One](https://leetcode.cn/problems/plus-one/)
 
+python
 ```python
 class Solution:
     def plusOne(self, digits: List[int]) -> List[int]:
@@ -181,6 +190,7 @@ class Solution:
 
 ### [Move Zeroes](https://leetcode.cn/problems/move-zeroes/)
 
+python
 ```python
 class Solution:
     def moveZeroes(self, nums: List[int]) -> None:
@@ -199,6 +209,7 @@ class Solution:
 
 ### [Two Sum](https://leetcode.cn/problems/two-sum/)
 
+python
 ```python
 class Solution:
     def twoSum(self, nums: List[int], target: int) -> List[int]:
@@ -210,6 +221,7 @@ class Solution:
         return list()
 ```
 
+rust
 ```rust
 impl Solution {
     pub fn two_sum(nums: Vec<i32>, target: i32) -> Vec<i32> {
@@ -232,6 +244,7 @@ impl Solution {
 
 ### [Valid Sudoku](https://leetcode.cn/problems/valid-sudoku/)
 
+python
 ```python
 class Solution:
     def isValidSudoku(self, board: List[List[str]]) -> bool:
@@ -256,6 +269,7 @@ class Solution:
 
 ### [Rotate Image](https://leetcode.cn/problems/rotate-image/)
 
+python
 ```python
 class Solution:
     def rotate(self, matrix: List[List[int]]) -> None:
