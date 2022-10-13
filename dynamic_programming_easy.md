@@ -1,6 +1,18 @@
 ### [Climbing Stairs](https://leetcode.cn/problems/climbing-stairs/)
 
+python
 ```python
+class Solution:
+    def climbStairs(self, n: int) -> int:
+        if n <= 1:
+            return 1
+        dp = [0 for _ in range(n)]
+        dp[0] = 1
+        dp[1] = 2
+        for i in range(2, n):
+            dp[i] = dp[i-1] + dp[i-2]
+        return dp[n-1]
+
 class Solution:
     def climbStairs(self, n: int) -> int:
         p = 0
@@ -18,6 +30,7 @@ class Solution:
 
 ### [Best Time to Buy and Sell Stock](https://leetcode.cn/problems/best-time-to-buy-and-sell-stock/)
 
+python
 ```python
 class Solution:
     def maxProfit(self, prices: List[int]) -> int:
@@ -29,6 +42,7 @@ class Solution:
         return maxprofit
 ```
 
+rust
 ```rust
 impl Solution {
     pub fn max_profit(prices: Vec<i32>) -> i32 {
@@ -48,7 +62,20 @@ impl Solution {
 
 ### [Maximum Subarray](https://leetcode.cn/problems/maximum-subarray/)
 
+python
 ```python
+class Solution:
+    def maxSubArray(self, nums: List[int]) -> int:
+        n = len(nums)
+        dp = [0 for _ in range(n)]
+        dp[0] = nums[0]
+        for i in range(1, n):
+            if dp[i - 1] > 0 :
+                dp[i] = dp[i - 1] + nums[i]
+            else:
+                dp[i] = nums[i]
+        return max(dp)
+
 class Solution:
     def maxSubArray(self, nums: List[int]) -> int:
         pre = 0
@@ -59,6 +86,7 @@ class Solution:
         return res
 ```
 
+rust
 ```rust
 impl Solution {
     pub fn max_sub_array(nums: Vec<i32>) -> i32 {
@@ -79,7 +107,20 @@ impl Solution {
 
 ### [House Robber](https://leetcode.cn/problems/house-robber/)
 
+python
 ```python
+class Solution:
+    def rob(self, nums: List[int]) -> int:
+        n = len(nums)
+        if n <= 1:
+            return nums[0]
+        dp = [0 for _ in range(n)]
+        dp[0] = nums[0]
+        dp[1] = max(nums[0], nums[1])
+        for i in range(2, n):
+            dp[i] = max(dp[i - 1], dp[i - 2] + nums[i])
+        return dp[n - 1]
+
 class Solution:
     def rob(self, nums: List[int]) -> int:
         if not nums:
