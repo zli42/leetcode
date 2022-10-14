@@ -1,5 +1,6 @@
 ### [Merge Sorted Array](https://leetcode.cn/problems/merge-sorted-array/)
 
+python
 ```python
 class Solution:
     def merge(self, nums1: List[int], m: int, nums2: List[int], n: int) -> None:
@@ -24,27 +25,27 @@ class Solution:
             tail -= 1
 ```
 
+rust
 ```rust
 impl Solution {
     pub fn merge(nums1: &mut Vec<i32>, m: i32, nums2: &mut Vec<i32>, n: i32) {
         let mut p1 = m as usize;
         let mut p2 = n as usize;
-        let mut tail = (m + n - 1) as usize;
-        while p1 > 0 || p2 > 0 {
-            if p1 == 0 {
-                nums1[tail] = nums2[p2 - 1];
-                p2 -= 1;
-            } else if p2 == 0 {
-                nums1[tail] = nums1[p1 - 1];
-                p1 -= 1;
-            } else if nums1[p1 - 1] > nums2[p2 - 1] {
-                nums1[tail] = nums1[p1 - 1];
+        let mut tail = (m + n) as usize;
+        while p1 > 0 && p2 > 0 {
+            if nums1[p1 - 1] > nums2[p2 - 1] {
+                nums1[tail - 1] = nums1[p1 - 1];
                 p1 -= 1;
             } else {
-                nums1[tail] = nums2[p2 - 1];
+                nums1[tail - 1] = nums2[p2 - 1];
                 p2 -= 1;
             }
-            tail -= 1
+            tail -= 1;
+        }
+        while p2 > 0 {
+            nums1[tail - 1] = nums2[p2 - 1];
+            p2 -= 1;
+            tail -= 1;
         }
     }
 }
@@ -55,6 +56,7 @@ impl Solution {
 
 ### [First Bad Version](https://leetcode.cn/problems/first-bad-version/)
 
+python
 ```python
 # The isBadVersion API is already defined for you.
 # def isBadVersion(version: int) -> bool:
@@ -70,6 +72,29 @@ class Solution:
             else:
                 left = mid + 1
         return left
+```
+
+rust
+```rust
+// The API isBadVersion is defined for you.
+// isBadVersion(version:i32)-> bool;
+// to call it use self.isBadVersion(version)
+
+impl Solution {
+    pub fn first_bad_version(&self, n: i32) -> i32 {
+		let mut start = 1;
+        let mut end = n;
+        while start < end {
+            let mut mid = start + (end - start) / 2;
+            if self.isBadVersion(mid) {
+                end = mid;
+            } else {
+                start = mid + 1;
+            }
+        }
+        start
+    }
+}
 ```
 
 * 时间复杂度：$O(\log n)$，其中 $n$ 是给定版本的数量。
