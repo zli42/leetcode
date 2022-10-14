@@ -25,6 +25,25 @@ class Solution:
         return r
 ```
 
+rust
+```rust
+impl Solution {
+    pub fn climb_stairs(n: i32) -> i32 {
+        if n <= 2 {
+            return n;
+        }
+        let mut first = 1;
+        let mut second = 2;
+        for i in 3..n+1 {
+            let cur = first + second;
+            first = second;
+            second = cur;
+        }
+        second
+    }
+}
+```
+
 * 时间复杂度：循环执行 $n$ 次，每次花费常数的时间代价，故渐进时间复杂度为 $O(n)$。
 * 空间复杂度：这里只用了常数个变量作为辅助空间，故渐进空间复杂度为 $O(1)$。
 
@@ -90,12 +109,11 @@ rust
 ```rust
 impl Solution {
     pub fn max_sub_array(nums: Vec<i32>) -> i32 {
-        let mut pre = 0;
+        let mut pre = nums[0];
         let mut res = nums[0];
-        for num in nums {
-            pre = std::cmp::max(pre + num, num);
-            if num > 0 
-            res = std::cmp::max(res, pre);
+        for i in 1..nums.len() {
+            pre = std::cmp::max(pre + nums[i], nums[i]);
+            res = std::cmp::max(pre, res);
         }
         res
     }
@@ -135,6 +153,29 @@ class Solution:
             first, second = second, max(first + nums[i], second)
         
         return second
+```
+
+rust
+```rust
+impl Solution {
+    pub fn rob(nums: Vec<i32>) -> i32 {
+        let n = nums.len();
+        if n == 1 {
+            return nums[0];
+        }
+        if n == 2 {
+            return std::cmp::max(nums[0], nums[1]);
+        }
+        let mut first = nums[0];
+        let mut second = std::cmp::max(nums[0], nums[1]);
+        for i in 2..nums.len() {
+            let cur = std::cmp::max(first + nums[i], second);
+            first = second;
+            second = cur;
+        }
+        second
+    }
+}
 ```
 
 * 时间复杂度：$O(n)$，其中 $n$ 是数组长度。只需要对数组遍历一次。
