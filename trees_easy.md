@@ -2,6 +2,7 @@
 
 DFS
 
+python
 ```python
 # Definition for a binary tree node.
 # class TreeNode:
@@ -19,6 +20,7 @@ class Solution:
             return max(left_height, right_height) + 1 
 ```
 
+rust
 ```rust
 // Definition for a binary tree node.
 // #[derive(Debug, PartialEq, Eq)]
@@ -40,16 +42,14 @@ class Solution:
 // }
 use std::rc::Rc;
 use std::cell::RefCell;
-
 impl Solution {
     pub fn max_depth(root: Option<Rc<RefCell<TreeNode>>>) -> i32 {
-        match root {
-            None => 0,
-            Some(root) => {
-                let leftHeight = Self::max_depth(root.borrow().left.clone());
-                let rightHeight = Self::max_depth(root.borrow().right.clone());
-                leftHeight.max(rightHeight) + 1
-            }
+        if let Some(root) = root {
+            let left_depth = Self::max_depth(root.borrow().left.clone());
+            let right_depth = Self::max_depth(root.borrow().right.clone());
+            std::cmp::max(left_depth, right_depth) + 1
+        } else {
+            0
         }
     }
 }
@@ -59,6 +59,7 @@ impl Solution {
 * 空间复杂度：$O(height)$，其中 `height` 表示二叉树的高度。递归函数需要栈空间，而栈空间取决于递归的深度，因此空间复杂度等价于二叉树的高度。
 
 BFS
+python
 ```python
 # Definition for a binary tree node.
 # class TreeNode:
@@ -84,6 +85,7 @@ class Solution:
         return depth
 ```
 
+rust
 ```rust
 // Definition for a binary tree node.
 // #[derive(Debug, PartialEq, Eq)]
@@ -103,30 +105,30 @@ class Solution:
 //     }
 //   }
 // }
+use std::rc::Rc;
+use std::cell::RefCell;
 impl Solution {
     pub fn max_depth(root: Option<Rc<RefCell<TreeNode>>>) -> i32 {
-        match root {
-            None => 0,
-            Some(root) => {
-                let mut queue = std::collections::VecDeque::new();
-                queue.push_back(root);
-                let mut depth = 0;
-                while !queue.is_empty() {
-                    let mut n = queue.len();
-                    for i in 0..n {
-                        if let Some(node) = queue.pop_front() {
-                            if let Some(left) = node.borrow().left.clone() {
-                                queue.push_back(left);
-                            }
-                            if let Some(right) = node.borrow().right.clone() {
-                                queue.push_back(right);
-                            }
+        if let Some(root) = root {
+            let mut depth = 0;
+            let mut queue = std::collections::VecDeque::new();
+            queue.push_back(root);
+            while !queue.is_empty() {
+                for _ in 0..queue.len() {
+                    if let Some(node) = queue.pop_front() {
+                        if let Some(left) = node.borrow().left.clone() {
+                            queue.push_back(left);
+                        }
+                        if let Some(right) = node.borrow().right.clone() {
+                            queue.push_back(right);
                         }
                     }
-                    depth += 1;
                 }
-                depth
+                depth += 1;
             }
+            depth
+        } else {
+            0
         }
     }
 }
@@ -139,6 +141,7 @@ impl Solution {
 
 DFS
 
+python
 ```python
 # Definition for a binary tree node.
 # class TreeNode:
@@ -161,6 +164,7 @@ class Solution:
         return helper(root)
 ```
 
+rust
 ```rust
 // Definition for a binary tree node.
 // #[derive(Debug, PartialEq, Eq)]
@@ -184,21 +188,19 @@ use std::rc::Rc;
 use std::cell::RefCell;
 impl Solution {
     pub fn is_valid_bst(root: Option<Rc<RefCell<TreeNode>>>) -> bool {
-        fn helper(node: &Option<Rc<RefCell<TreeNode>>>, lower: i64, upper: i64) -> bool {
-            match node {
-                None => true,
-                Some(node) => {
-                    let val = node.borrow().val as i64;
-                    if val <= lower || val >= upper {
-                        return false;
-                    }
+        Self::helper(&root, std::i32::MIN, std::i32::MAX)
+    }
 
-                    return helper(&node.borrow().left, lower, val)
-                        && helper(&node.borrow().right, val, upper);
-                }
+    fn helper(node: &Option<Rc<RefCell<TreeNode>>>, left: i32, right: i32) -> bool {
+        if let Some(node) = node {
+            let node = node.borrow();
+            if node.val <= left || node.val >= right {
+                return false;
             }
+            Self::helper(&node.left, left, node.val) && Self::helper(&node.right, node.val, right)
+        } else {
+            true
         }
-        helper(&root, std::i64::MIN, std::i64::MAX)
     }
 }
 ```
@@ -208,6 +210,7 @@ impl Solution {
 
 BFS
 
+python
 ```python
 # Definition for a binary tree node.
 # class TreeNode:
@@ -235,6 +238,60 @@ class Solution:
         return True
 ```
 
+rust
+```rust
+// Definition for a binary tree node.
+// #[derive(Debug, PartialEq, Eq)]
+// pub struct TreeNode {
+//   pub val: i32,
+//   pub left: Option<Rc<RefCell<TreeNode>>>,
+//   pub right: Option<Rc<RefCell<TreeNode>>>,
+// }
+//
+// impl TreeNode {
+//   #[inline]
+//   pub fn new(val: i32) -> Self {
+//     TreeNode {
+//       val,
+//       left: None,
+//       right: None
+//     }
+//   }
+// }
+use std::rc::Rc;
+use std::cell::RefCell;
+impl Solution {
+    pub fn is_valid_bst(root: Option<Rc<RefCell<TreeNode>>>) -> bool {
+        enum Visited {
+            Yes,
+            No,
+        }
+        let mut pre = std::i32::MIN;
+        let mut queue = vec![(root.clone(), Visited::No)];
+        while let Some(item) = queue.pop() {
+            if let Some(node) = item.0.clone() {
+                let node = node.borrow();
+                match item.1 {
+                    Visited::Yes => {
+                        if node.val <= pre {
+                            return false;
+                        } else {
+                            pre = node.val;
+                        }
+                    }
+                    Visited::No => {
+                        queue.push((node.right.clone(), Visited::No));
+                        queue.push((item.0.clone(), Visited::Yes));
+                        queue.push((node.left.clone(), Visited::No));
+                    }
+                }
+            }
+        }
+        true
+    }
+}
+```
+
 * 时间复杂度：$O(n)$，其中 $n$ 为二叉树的节点个数。二叉树的每个节点最多被访问一次，因此时间复杂度为 $O(n)$。
 * 空间复杂度：$O(n)$，其中 $n$ 为二叉树的节点个数。栈最多存储 $n$ 个节点，因此需要额外的 $O(n)$ 的空间。
 
@@ -242,6 +299,7 @@ class Solution:
 
 DFS
 
+python
 ```python
 # Definition for a binary tree node.
 # class TreeNode:
@@ -266,6 +324,7 @@ class Solution:
         return check(root, root)
 ```
 
+rust
 ```rust
 // Definition for a binary tree node.
 // #[derive(Debug, PartialEq, Eq)]
@@ -287,29 +346,31 @@ class Solution:
 // }
 use std::rc::Rc;
 use std::cell::RefCell;
-
 impl Solution {
     pub fn is_symmetric(root: Option<Rc<RefCell<TreeNode>>>) -> bool {
-        fn dfs(
-            left: &Option<Rc<RefCell<TreeNode>>>,
-            right: &Option<Rc<RefCell<TreeNode>>>,
-        ) -> bool {
-            match (left, right) {
-                (None, None) => true,
-                (Some(left), Some(right)) => {
-                    if left.borrow().val != right.borrow().val {
-                        false
-                    } else {
-                        dfs(&left.borrow().left, &right.borrow().right)
-                            && dfs(&left.borrow().right, &right.borrow().left)
-                    }
-                }
-                _ => false,
-            }
+        if let Some(root) = root {
+            Self::helper(&root.borrow().left, &root.borrow().right)
+        } else {
+            true
         }
-        match root {
-            None => true,
-            Some(root) => dfs(&root.borrow().left, &root.borrow().right),
+    }
+
+    fn helper(
+        left_node: &Option<Rc<RefCell<TreeNode>>>,
+        right_node: &Option<Rc<RefCell<TreeNode>>>,
+    ) -> bool {
+        match (left_node, right_node) {
+            (Some(left_node), Some(right_node)) => {
+                let left_node = left_node.borrow();
+                let right_node = right_node.borrow();
+                if left_node.val != right_node.val {
+                    return false;
+                }
+                Self::helper(&left_node.left, &right_node.right)
+                    && Self::helper(&left_node.right, &right_node.left)
+            }
+            (None, None) => true,
+            _ => false,
         }
     }
 }
@@ -321,6 +382,7 @@ impl Solution {
 
 BFS
 
+python
 ```python
 # Definition for a binary tree node.
 # class TreeNode:
@@ -348,6 +410,7 @@ class Solution:
         return True
 ```
 
+rust
 ```rust
 // Definition for a binary tree node.
 // #[derive(Debug, PartialEq, Eq)]
@@ -367,21 +430,25 @@ class Solution:
 //     }
 //   }
 // }
+use std::rc::Rc;
+use std::cell::RefCell;
 impl Solution {
     pub fn is_symmetric(root: Option<Rc<RefCell<TreeNode>>>) -> bool {
         if let Some(root) = root {
-            let mut queue = vec![(root.borrow().left.clone(), root.borrow().right.clone())];
-            while let Some((left, right)) = queue.pop() {
-                match (left, right) {
-                    (None, None) => (),
-                    (Some(left), Some(right)) => {
-                        if left.borrow().val == right.borrow().val {
-                            queue.push((left.borrow().left.clone(), right.borrow().right.clone()));
-                            queue.push((left.borrow().right.clone(), right.borrow().left.clone()));
-                        } else {
+            let root = root.borrow();
+            let mut queue = vec![(root.left.clone(), root.right.clone())];
+            while let Some((left_node, right_node)) = queue.pop() {
+                match (left_node, right_node) {
+                    (Some(left_node), Some(right_node)) => {
+                        let left_node = left_node.borrow();
+                        let right_node = right_node.borrow();
+                        if left_node.val != right_node.val {
                             return false;
                         }
-                    },
+                        queue.push((left_node.left.clone(), right_node.right.clone()));
+                        queue.push((left_node.right.clone(), right_node.left.clone()));
+                    }
+                    (None, None) => (),
                     _ => return false,
                 }
             }
@@ -396,6 +463,7 @@ impl Solution {
 
 ### [Binary Tree Level Order Traversal](https://leetcode.cn/problems/binary-tree-level-order-traversal/)
 
+python
 ```python
 # Definition for a binary tree node.
 # class TreeNode:
@@ -423,6 +491,7 @@ class Solution:
         return res
 ```
 
+rust
 ```rust
 // Definition for a binary tree node.
 // #[derive(Debug, PartialEq, Eq)]
@@ -431,7 +500,7 @@ class Solution:
 //   pub left: Option<Rc<RefCell<TreeNode>>>,
 //   pub right: Option<Rc<RefCell<TreeNode>>>,
 // }
-// 
+//
 // impl TreeNode {
 //   #[inline]
 //   pub fn new(val: i32) -> Self {
@@ -446,29 +515,29 @@ use std::rc::Rc;
 use std::cell::RefCell;
 impl Solution {
     pub fn level_order(root: Option<Rc<RefCell<TreeNode>>>) -> Vec<Vec<i32>> {
-        match root {
-            None => vec![],
-            Some(root) => {
-                let mut res = vec![];
-                let mut queue = std::collections::VecDeque::new();
-                queue.push_back(root);
-                while !queue.is_empty() {
-                    let mut level = vec![];
-                    for _ in 0..queue.len() {
-                        if let Some(node) = queue.pop_front() {
-                            level.push(node.borrow().val);
-                            if let Some(left) = node.borrow().left.clone() {
-                                queue.push_back(left);
-                            }
-                            if let Some(right) = node.borrow().right.clone() {
-                                queue.push_back(right);
-                            }
+        if let Some(root) = root {
+            let mut res = vec![];
+            let mut queue = std::collections::VecDeque::new();
+            queue.push_back(root);
+            while !queue.is_empty() {
+                let mut level = vec![];
+                for _ in 0..queue.len() {
+                    if let Some(node) = queue.pop_front() {
+                        let node = node.borrow();
+                        level.push(node.val);
+                        if let Some(left) = node.left.clone() {
+                            queue.push_back(left);
+                        }
+                        if let Some(right) = node.right.clone() {
+                            queue.push_back(right);
                         }
                     }
-                    res.push(level);
                 }
-                res
+                res.push(level);
             }
+            res
+        } else {
+            vec![]
         }
     }
 }
@@ -479,6 +548,7 @@ impl Solution {
 
 ### [Convert Sorted Array to Binary Search Tree](https://leetcode.cn/problems/convert-sorted-array-to-binary-search-tree/)
 
+python
 ```python
 # Definition for a binary tree node.
 # class TreeNode:
@@ -500,6 +570,7 @@ class Solution:
         return helper(0, len(nums) - 1)     
 ```
 
+rust
 ```rust
 // Definition for a binary tree node.
 // #[derive(Debug, PartialEq, Eq)]
@@ -523,17 +594,19 @@ use std::rc::Rc;
 use std::cell::RefCell;
 impl Solution {
     pub fn sorted_array_to_bst(nums: Vec<i32>) -> Option<Rc<RefCell<TreeNode>>> {
-        fn helper(nums: &Vec<i32>, left: usize, right: usize) -> Option<Rc<RefCell<TreeNode>>> {
-            if left >= right {
-                return None;
-            }
-            let mid = (left + right) / 2;
-            let mut root = TreeNode::new(nums[mid]);
-            root.left = helper(nums, left, mid);
-            root.right = helper(nums, mid + 1, right);
-            return Some(Rc::new(RefCell::new(root)));
+        Self::helper(&nums, 0, nums.len())
+    }
+
+    fn helper(nums: &Vec<i32>, left: usize, right: usize) -> Option<Rc<RefCell<TreeNode>>> {
+        if left >= right {
+            return None
         }
-        return helper(&nums, 0, nums.len());
+
+        let mid = left + (right - left) / 2;
+        let mut root = TreeNode::new(nums[mid]);
+        root.left = Self::helper(nums, left, mid);
+        root.right = Self::helper(nums, mid + 1, right);
+        return Some(Rc::new(RefCell::new(root)));
     }
 }
 ```
