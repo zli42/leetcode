@@ -1,5 +1,6 @@
 ### [Jump Game](https://leetcode.cn/problems/jump-game/)
 
+python
 ```python
 class Solution:
     def canJump(self, nums: List[int]) -> bool:
@@ -15,20 +16,25 @@ class Solution:
         return False
 ```
 
+rust
 ```rust
 impl Solution {
     pub fn can_jump(nums: Vec<i32>) -> bool {
         let n = nums.len();
-        let mut rightmost = 0;
+        let mut right_most = 0;
         for i in 0..n {
-            if i <= rightmost {
-                rightmost = std::cmp::max(rightmost, i + nums[i] as usize);
-                if rightmost >= n - 1 {
-                    return true;
-                }
+            if i > right_most {
+                return false;
             }
+
+            if right_most >= n - 1 {
+                return true;
+            }
+
+            right_most = std::cmp::max(right_most, i + nums[i] as usize);
         }
-        return false;
+
+        false
     }
 }
 ```
@@ -38,6 +44,7 @@ impl Solution {
 
 ### [ Coin Change](https://leetcode.cn/problems/coin-change/)
 
+python
 ```python
 class Solution:
     def coinChange(self, coins: List[int], amount: int) -> int:
@@ -51,11 +58,35 @@ class Solution:
         return dp[amount] if dp[amount] != float('inf') else -1
 ```
 
+rust
+```rust
+impl Solution {
+    pub fn coin_change(coins: Vec<i32>, amount: i32) -> i32 {
+        let mut dp = vec![amount + 1; amount as usize + 1];
+        dp[0] = 0;
+        for i in 1..amount + 1 {
+            for coin in coins.iter() {
+                if i - coin < 0 {
+                    continue;
+                }
+                dp[i as usize] = std::cmp::min(dp[i as usize], dp[(i - coin) as usize] + 1)
+            }
+        }
+        if dp[amount as usize] == amount + 1 {
+            -1
+        } else {
+            dp[amount as usize]
+        }
+    }
+}
+```
+
 * 时间复杂度：$O(Sn)$，其中 $S$ 是金额，$n$ 是面额数。我们一共需要计算 $O(S)$ 个状态，$S$ 为题目所给的总金额。对于每个状态，每次需要枚举 $n$ 个面额来转移状态，所以一共需要 $O(Sn)$ 的时间复杂度。
 * 空间复杂度：$O(S)$。数组 `dp` 需要开长度为总金额 $S$ 的空间。
 
 ### [Longest Increasing Subsequence](https://leetcode.cn/problems/longest-increasing-subsequence/)
 
+python
 ```python
 class Solution:
     def lengthOfLIS(self, nums: List[int]) -> int:
@@ -77,6 +108,34 @@ class Solution:
                 d[loc]  = num
                 
         return len(d)
+```
+
+rust
+```rust
+impl Solution {
+    pub fn length_of_lis(nums: Vec<i32>) -> i32 {
+        let mut list = vec![&nums[0]];  // list 并非实际的最长递增子序列，但是长度是对的
+        for num in nums.iter().skip(1) {
+            let n = list.len();
+            if num > list[n - 1] {
+                list.push(num);
+            } else {
+                let mut left = 0;
+                let mut right = n;
+                while left < right {
+                    let mid = left + (right - left) / 2;
+                    if num > list[mid] {
+                        left = mid + 1;
+                    } else {
+                        right = mid
+                    }
+                }
+                list[left] = num;
+            }
+        }
+        list.len() as i32
+    }
+}
 ```
 
 * 时间复杂度：$O(n\log n)$。数组 `nums` 的长度为 `n`，我们依次用数组中的元素去更新 `d` 数组，而更新 `d` 数组时需要进行 $O(\log n)$ 的二分搜索，所以总时间复杂度为 $O(n\log n)$。
