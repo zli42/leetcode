@@ -42,6 +42,7 @@ impl Solution {
             }
             tail -= 1;
         }
+
         while p2 > 0 {
             nums1[tail - 1] = nums2[p2 - 1];
             p2 -= 1;
@@ -82,17 +83,17 @@ rust
 
 impl Solution {
     pub fn first_bad_version(&self, n: i32) -> i32 {
-		let mut start = 1;
-        let mut end = n;
-        while start < end {
-            let mut mid = start + (end - start) / 2;
+        let mut left = 1;
+        let mut right = n;
+        while left < right {
+            let mid = left + (right - left) / 2;
             if self.isBadVersion(mid) {
-                end = mid;
+                right = mid;
             } else {
-                start = mid + 1;
+                left = mid + 1;
             }
         }
-        start
+        left
     }
 }
 ```
