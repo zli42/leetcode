@@ -32,9 +32,10 @@ impl Solution {
         if n <= 2 {
             return n;
         }
+
         let mut first = 1;
         let mut second = 2;
-        for i in 3..n+1 {
+        for i in 3..n + 1 {
             let cur = first + second;
             first = second;
             second = cur;
@@ -66,10 +67,10 @@ rust
 impl Solution {
     pub fn max_profit(prices: Vec<i32>) -> i32 {
         let mut maxprofit = 0;
-        let mut minprice = prices[0];
+        let mut min_price = prices[0];
         for price in prices {
-            maxprofit = std::cmp::max(price - minprice, maxprofit);
-            minprice = std::cmp::min(price, minprice);
+            maxprofit = std::cmp::max(maxprofit, price - min_price);
+            min_price = std::cmp::min(min_price, price);
         }
         maxprofit
     }
@@ -109,11 +110,11 @@ rust
 ```rust
 impl Solution {
     pub fn max_sub_array(nums: Vec<i32>) -> i32 {
-        let mut pre = nums[0];
         let mut res = nums[0];
-        for i in 1..nums.len() {
-            pre = std::cmp::max(pre + nums[i], nums[i]);
-            res = std::cmp::max(pre, res);
+        let mut pre = 0;
+        for num in nums {
+            pre = std::cmp::max(pre + num, num);
+            res = std::cmp::max(res, pre);
         }
         res
     }
@@ -163,12 +164,14 @@ impl Solution {
         if n == 1 {
             return nums[0];
         }
+
         if n == 2 {
             return std::cmp::max(nums[0], nums[1]);
         }
+
         let mut first = nums[0];
         let mut second = std::cmp::max(nums[0], nums[1]);
-        for i in 2..nums.len() {
+        for i in 2..n {
             let cur = std::cmp::max(first + nums[i], second);
             first = second;
             second = cur;
