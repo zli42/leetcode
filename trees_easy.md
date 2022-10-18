@@ -45,8 +45,9 @@ use std::cell::RefCell;
 impl Solution {
     pub fn max_depth(root: Option<Rc<RefCell<TreeNode>>>) -> i32 {
         if let Some(root) = root {
-            let left_depth = Self::max_depth(root.borrow().left.clone());
-            let right_depth = Self::max_depth(root.borrow().right.clone());
+            let root = root.borrow();
+            let left_depth = Self::max_depth(root.left.clone());
+            let right_depth = Self::max_depth(root.right.clone());
             std::cmp::max(left_depth, right_depth) + 1
         } else {
             0
@@ -116,11 +117,12 @@ impl Solution {
             while !queue.is_empty() {
                 for _ in 0..queue.len() {
                     if let Some(node) = queue.pop_front() {
-                        if let Some(left) = node.borrow().left.clone() {
-                            queue.push_back(left);
+                        let node = node.borrow();
+                        if let Some(left_node) = node.left.clone() {
+                            queue.push_back(left_node);
                         }
-                        if let Some(right) = node.borrow().right.clone() {
-                            queue.push_back(right);
+                        if let Some(right_node) = node.right.clone() {
+                            queue.push_back(right_node);
                         }
                     }
                 }
@@ -194,10 +196,11 @@ impl Solution {
     fn helper(node: &Option<Rc<RefCell<TreeNode>>>, left: i32, right: i32) -> bool {
         if let Some(node) = node {
             let node = node.borrow();
-            if node.val <= left || node.val >= right {
+            let val = node.val;
+            if val <= left || val >= right {
                 return false;
             }
-            Self::helper(&node.left, left, node.val) && Self::helper(&node.right, node.val, right)
+            Self::helper(&node.left, left, val) && Self::helper(&node.right, val, right)
         } else {
             true
         }
@@ -267,17 +270,17 @@ impl Solution {
             No,
         }
         let mut pre = std::i32::MIN;
-        let mut queue = vec![(root.clone(), Visited::No)];
+        let mut queue = vec![(root, Visited::No)];
         while let Some(item) = queue.pop() {
             if let Some(node) = item.0.clone() {
                 let node = node.borrow();
                 match item.1 {
                     Visited::Yes => {
-                        if node.val <= pre {
+                        let val = node.val;
+                        if val <= pre {
                             return false;
-                        } else {
-                            pre = node.val;
                         }
+                        pre = val;
                     }
                     Visited::No => {
                         queue.push((node.right.clone(), Visited::No));
@@ -349,7 +352,8 @@ use std::cell::RefCell;
 impl Solution {
     pub fn is_symmetric(root: Option<Rc<RefCell<TreeNode>>>) -> bool {
         if let Some(root) = root {
-            Self::helper(&root.borrow().left, &root.borrow().right)
+            let root = root.borrow();
+            Self::helper(&root.left, &root.right)
         } else {
             true
         }
@@ -525,11 +529,11 @@ impl Solution {
                     if let Some(node) = queue.pop_front() {
                         let node = node.borrow();
                         level.push(node.val);
-                        if let Some(left) = node.left.clone() {
-                            queue.push_back(left);
+                        if let Some(left_node) = node.left.clone() {
+                            queue.push_back(left_node);
                         }
-                        if let Some(right) = node.right.clone() {
-                            queue.push_back(right);
+                        if let Some(right_node) = node.right.clone() {
+                            queue.push_back(right_node);
                         }
                     }
                 }
@@ -599,13 +603,13 @@ impl Solution {
 
     fn helper(nums: &Vec<i32>, left: usize, right: usize) -> Option<Rc<RefCell<TreeNode>>> {
         if left >= right {
-            return None
+            return None;
         }
 
         let mid = left + (right - left) / 2;
         let mut root = TreeNode::new(nums[mid]);
-        root.left = Self::helper(nums, left, mid);
-        root.right = Self::helper(nums, mid + 1, right);
+        root.left = Self::helper(&nums, left, mid);
+        root.right = Self::helper(&nums, mid + 1, right);
         return Some(Rc::new(RefCell::new(root)));
     }
 }
