@@ -35,7 +35,7 @@ impl Solution {
 
         let mut first = 1;
         let mut second = 2;
-        for i in 3..n + 1 {
+        for i in 3..=n {
             let cur = first + second;
             first = second;
             second = cur;
@@ -68,7 +68,7 @@ impl Solution {
     pub fn max_profit(prices: Vec<i32>) -> i32 {
         let mut maxprofit = 0;
         let mut min_price = prices[0];
-        for price in prices {
+        for price in prices.iter() {
             maxprofit = std::cmp::max(maxprofit, price - min_price);
             min_price = std::cmp::min(min_price, price);
         }
@@ -112,7 +112,7 @@ impl Solution {
     pub fn max_sub_array(nums: Vec<i32>) -> i32 {
         let mut res = nums[0];
         let mut pre = 0;
-        for num in nums {
+        for num in nums.iter() {
             pre = std::cmp::max(pre + num, num);
             res = std::cmp::max(res, pre);
         }

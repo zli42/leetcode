@@ -27,11 +27,11 @@ impl Solution {
                 return false;
             }
 
+            right_most = std::cmp::max(right_most, i + nums[i] as usize);
+
             if right_most >= n - 1 {
                 return true;
             }
-
-            right_most = std::cmp::max(right_most, i + nums[i] as usize);
         }
 
         false
@@ -64,7 +64,7 @@ impl Solution {
     pub fn coin_change(coins: Vec<i32>, amount: i32) -> i32 {
         let mut dp = vec![amount + 1; amount as usize + 1];
         dp[0] = 0;
-        for i in 1..amount + 1 {
+        for i in 1..=amount {
             for coin in coins.iter() {
                 if i - coin < 0 {
                     continue;
