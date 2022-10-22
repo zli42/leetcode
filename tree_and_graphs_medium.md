@@ -45,16 +45,18 @@ use std::rc::Rc;
 use std::cell::RefCell;
 impl Solution {
     pub fn inorder_traversal(root: Option<Rc<RefCell<TreeNode>>>) -> Vec<i32> {
-        fn dfs(node: Option<Rc<RefCell<TreeNode>>>, res: &mut Vec<i32>) {
-            if let Some(node) = node {
-                dfs(node.borrow().left.clone(), res);
-                res.push(node.borrow().val);
-                dfs(node.borrow().right.clone(), res);
-            }
-        }
         let mut res = vec![];
-        dfs(root, &mut res);
+        Self::helper(root, &mut res);
         res
+    }
+
+    fn helper(node: Option<Rc<RefCell<TreeNode>>>, res: &mut Vec<i32>) {
+        if let Some(node) = node {
+            let node = node.borrow();
+            Self::helper(node.left.clone(), res);
+            res.push(node.val);
+            Self::helper(node.right.clone(), res);
+        }
     }
 }
 ```
@@ -101,25 +103,28 @@ class Solution:
 //     }
 //   }
 // }
-use std::cell::RefCell;
 use std::rc::Rc;
+use std::cell::RefCell;
 impl Solution {
     pub fn inorder_traversal(root: Option<Rc<RefCell<TreeNode>>>) -> Vec<i32> {
         enum Visited {
             Yes,
             No,
         }
-        let mut res: Vec<i32> = vec![];
-        let mut stack = vec![(Visited::No, root)];
-        while !stack.is_empty() {
-            if let Some(s) = stack.pop() {
-                if let Some(node) = s.1.clone() {
-                    if let Visited::No = s.0 {
-                        stack.push((Visited::No, node.borrow().right.clone()));
-                        stack.push((Visited::Yes, s.1.clone()));
-                        stack.push((Visited::No, node.borrow().left.clone()));
-                    } else {
-                        res.push(node.borrow().val)
+
+        let mut res = vec![];
+        let mut queue = vec![(root, Visited::No)];
+        while let Some(each) = queue.pop() {
+            if let Some(node) = each.0.clone() {
+                let node = node.borrow();
+                match each.1 {
+                    Visited::Yes => {
+                        res.push(node.val);
+                    }
+                    Visited::No => {
+                        queue.push((node.right.clone(), Visited::No));
+                        queue.push((each.0.clone(), Visited::Yes));
+                        queue.push((node.left.clone(), Visited::No));
                     }
                 }
             }
