@@ -2,6 +2,7 @@
 
 DFS
 
+python
 ```python
 # Definition for a binary tree node.
 # class TreeNode:
@@ -66,6 +67,7 @@ impl Solution {
 
 BFS
 
+python
 ```python
 class Solution:
     def inorderTraversal(self, root: TreeNode) -> List[int]:
@@ -139,6 +141,7 @@ impl Solution {
 
 ### [Binary Tree Zigzag Level Order Traversal](https://leetcode.cn/problems/binary-tree-zigzag-level-order-traversal/)
 
+python
 ```python
 # Definition for a binary tree node.
 # class TreeNode:
@@ -233,6 +236,7 @@ impl Solution {
 
 ### [Construct Binary Tree from Preorder and Inorder Traversal](https://leetcode.cn/problems/construct-binary-tree-from-preorder-and-inorder-traversal/)
 
+python
 ```python
 # Definition for a binary tree node.
 # class TreeNode:
@@ -257,6 +261,7 @@ class Solution:
 
 ### [Populating Next Right Pointers in Each Node](https://leetcode.cn/problems/populating-next-right-pointers-in-each-node/)
 
+python
 ```python
 """
 # Definition for a Node.
@@ -290,6 +295,7 @@ class Solution:
 * 时间复杂度：$O(N)$。每个节点会被访问一次且只会被访问一次，即从队列中弹出，并建立 `next` 指针。
 * 空间复杂度：$O(N)$。这是一棵完美二叉树，它的最后一个层级包含 $N/2$ 个节点。广度优先遍历的复杂度取决于一个层级上的最大元素数量。这种情况下空间复杂度为 $O(N)$。
 
+python
 ```python
 """
 # Definition for a Node.
@@ -323,6 +329,7 @@ class Solution:
 
 ### [Kth Smallest Element in a BST](https://leetcode.cn/problems/kth-smallest-element-in-a-bst/)
 
+python
 ```python
 # Definition for a binary tree node.
 # class TreeNode:
@@ -358,6 +365,7 @@ class Solution:
 
 DFS
 
+python
 ```python
 class Solution:
     def numIslands(self, grid: List[List[str]]) -> int:
@@ -382,6 +390,7 @@ class Solution:
 
 BFS
 
+python
 ```python
 class Solution:
     def numIslands(self, grid: List[List[str]]) -> int:
