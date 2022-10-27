@@ -256,6 +256,84 @@ class Solution:
         return root
 ```
 
+rust
+```rust
+// Definition for a binary tree node.
+// #[derive(Debug, PartialEq, Eq)]
+// pub struct TreeNode {
+//   pub val: i32,
+//   pub left: Option<Rc<RefCell<TreeNode>>>,
+//   pub right: Option<Rc<RefCell<TreeNode>>>,
+// }
+//
+// impl TreeNode {
+//   #[inline]
+//   pub fn new(val: i32) -> Self {
+//     TreeNode {
+//       val,
+//       left: None,
+//       right: None
+//     }
+//   }
+// }
+use std::rc::Rc;
+use std::cell::RefCell;
+use std::collections::HashMap;
+impl Solution {
+    pub fn build_tree(preorder: Vec<i32>, inorder: Vec<i32>) -> Option<Rc<RefCell<TreeNode>>> {
+        let in_idx: HashMap<_, _> = inorder.iter().enumerate().map(|(i, &v)| (v, i)).collect();
+        Self::helper(
+            &preorder,
+            &inorder,
+            0,
+            preorder.len(),
+            0,
+            inorder.len(),
+            &in_idx,
+        )
+    }
+
+    fn helper(
+        preorder: &[i32],
+        inorder: &[i32],
+        pre_left: usize,
+        pre_right: usize,
+        in_left: usize,
+        in_right: usize,
+        in_idx: &HashMap<i32, usize>,
+    ) -> Option<Rc<RefCell<TreeNode>>> {
+        if pre_left >= pre_right {
+            return None;
+        }
+
+        let root_val = preorder[pre_left];
+        let mut root = TreeNode::new(root_val);
+
+        let left_size = *in_idx.get(&root_val).unwrap() - in_left;
+        root.left = Self::helper(
+            &preorder,
+            &inorder,
+            pre_left + 1,
+            pre_left + 1 + left_size,
+            in_left,
+            in_left + left_size,
+            &in_idx,
+        );
+        root.right = Self::helper(
+            &preorder,
+            &inorder,
+            pre_left + 1 + left_size,
+            pre_right,
+            in_left + left_size + 1,
+            in_right,
+            &in_idx,
+        );
+
+        Some(Rc::new(RefCell::new(root)))
+    }
+}
+```
+
 * 时间复杂度：$O(n)$，其中 $n$ 是树中的节点个数。
 * 空间复杂度：$O(n)$，除去返回的答案需要的 $O(n)$ 空间之外，我们还需要使用 $O(n)$ 的空间存储哈希映射，以及 $O(h)$（其中 $h$ 是树的高度）的空间表示递归时栈空间。这里 $h < nh<n$，所以总空间复杂度为 $O(n)$。
 
