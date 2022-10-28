@@ -436,6 +436,59 @@ class Solution:
         return None
 ```
 
+rust
+```rust
+// Definition for a binary tree node.
+// #[derive(Debug, PartialEq, Eq)]
+// pub struct TreeNode {
+//   pub val: i32,
+//   pub left: Option<Rc<RefCell<TreeNode>>>,
+//   pub right: Option<Rc<RefCell<TreeNode>>>,
+// }
+//
+// impl TreeNode {
+//   #[inline]
+//   pub fn new(val: i32) -> Self {
+//     TreeNode {
+//       val,
+//       left: None,
+//       right: None
+//     }
+//   }
+// }
+use std::rc::Rc;
+use std::cell::RefCell;
+impl Solution {
+    pub fn kth_smallest(root: Option<Rc<RefCell<TreeNode>>>, k: i32) -> i32 {
+        enum Visited {
+            Yes,
+            No,
+        }
+        let mut k = k;
+        let mut queue = vec![(root, Visited::No)];
+        while let Some((root, state)) = queue.pop() {
+            if let Some(node) = root.clone() {
+                let node = node.borrow();
+                match state {
+                    Visited::Yes => {
+                        k -= 1;
+                        if k == 0 {
+                            return node.val;
+                        }
+                    }
+                    Visited::No => {
+                        queue.push((node.right.clone(), Visited::No));
+                        queue.push((root, Visited::Yes));
+                        queue.push((node.left.clone(), Visited::No));
+                    }
+                }
+            }
+        }
+        -1
+    }
+}
+```
+
 * 时间复杂度：$O(H+k)$，其中 $H$ 是树的高度。在开始遍历之前，我们需要 $O(H)$ 到达叶结点。当树是平衡树时，时间复杂度取得最小值 $O(\log N + k)$；当树是线性树（树中每个结点都只有一个子结点或没有子结点）时，时间复杂度取得最大值 $O(N+k)$。
 * 空间复杂度：$O(H)$，栈中最多需要存储 $H$ 个元素。当树是平衡树时，空间复杂度取得最小值 $O(\log N)$；当树是线性树时，空间复杂度取得最大值 $O(N)$。
 
@@ -461,6 +514,39 @@ class Solution:
                     dfs(grid, r, cO)
                     
         return num_islands
+```
+
+rust
+```rust
+impl Solution {
+    pub fn num_islands(grid: Vec<Vec<char>>) -> i32 {
+        let mut grid = grid;
+        let mut res = 0;
+        for row in 0..grid.len() {
+            for col in 0..grid[0].len() {
+                if grid[row][col] == '1' {
+                    Self::helper(&mut grid, row, col);
+                    res += 1;
+                }
+            }
+        }
+        res
+    }
+
+    fn helper(grid: &mut Vec<Vec<char>>, row: usize, col: usize) {
+        if row < 0 || row > grid.len() - 1 || col < 0 || col > grid[0].len() - 1 {
+            return;
+        }
+        if grid[row][col] != '1' {
+            return;
+        }
+        grid[row][col] = '2';
+        Self::helper(grid, row - 1, col);
+        Self::helper(grid, row + 1, col);
+        Self::helper(grid, row, col - 1);
+        Self::helper(grid, row, col + 1);
+    }
+}
 ```
 
 * 时间复杂度：$O(MN)$，其中 $M$ 和 $N$ 分别为行数和列数。
