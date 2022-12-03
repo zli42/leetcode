@@ -1,6 +1,7 @@
 ### [Sort Colors](https://leetcode.cn/problems/sort-colors/)
 
 python
+
 ```python
 class Solution:
     def sortColors(self, nums: List[int]) -> None:
@@ -22,6 +23,7 @@ class Solution:
 ```
 
 rust
+
 ```rust
 impl Solution {
     pub fn sort_colors(nums: &mut Vec<i32>) {
@@ -53,6 +55,7 @@ impl Solution {
 ### [Top K Frequent Elements](https://leetcode.cn/problems/top-k-frequent-elements/)
 
 python
+
 ```python
 class Solution:
     def topKFrequent(self, nums: List[int], k: int) -> List[int]:
@@ -73,6 +76,7 @@ class Solution:
 ```
 
 rust
+
 ```rust
 impl Solution {
     pub fn top_k_frequent(nums: Vec<i32>, k: i32) -> Vec<i32> {
@@ -106,6 +110,7 @@ impl Solution {
 ### [Kth Largest Element in an Array](https://leetcode.cn/problems/kth-largest-element-in-an-array/)
 
 python
+
 ```python
 class Solution:
     def findKthLargest(self, nums: List[int], k: int) -> int:
@@ -135,6 +140,7 @@ class Solution:
 ```
 
 rust
+
 ```rust
 impl Solution {
     pub fn find_kth_largest(nums: Vec<i32>, k: i32) -> i32 {
@@ -166,6 +172,7 @@ impl Solution {
 ### [Find Peak Element](https://leetcode.cn/problems/find-peak-element/)
 
 python
+
 ```python
 class Solution:
     def findPeakElement(self, nums: List[int]) -> int:
@@ -187,6 +194,7 @@ class Solution:
 ```
 
 rust
+
 ```rust
 impl Solution {
     pub fn find_peak_element(nums: Vec<i32>) -> i32 {
@@ -224,6 +232,7 @@ impl Solution {
 ### [Merge Intervals](https://leetcode.cn/problems/merge-intervals/)
 
 python
+
 ```python
 class Solution:
     def merge(self, intervals: List[List[int]]) -> List[List[int]]:
@@ -264,27 +273,27 @@ impl Solution {
 ### [Search in Rotated Sorted Array](https://leetcode.cn/problems/search-in-rotated-sorted-array/)
 
 python
+
 ```python
 class Solution:
     def search(self, nums: List[int], target: int) -> int:
-        l = 0
-        r = len(nums) - 1
-        while l <= r:
-            mid = (l + r) // 2
+        left = 0
+        right = len(nums) - 1
+        while left <= right:
+            mid = left + (right - left) // 2
             if nums[mid] == target:
                 return mid
-            
-            if nums[0] <= nums[mid]:
-                if nums[0] <= target < nums[mid]:
-                    r = mid - 1
+
+            if nums[left] <= nums[mid]:
+                if nums[left]<= target < nums[mid]:
+                    right = mid - 1
                 else:
-                    l = mid + 1
+                    left = mid + 1
             else:
-                if nums[mid] < target <= nums[r]:
-                    l = mid + 1
+                if nums[mid] < target <= nums[right]:
+                    left = mid + 1
                 else:
-                    r = mid - 1
-                    
+                    right = mid - 1
         return -1
 ```
 
@@ -320,10 +329,11 @@ impl Solution {
 
 * 时间复杂度： $O(\log n)$，其中 $n$ 为 `nums` 数组的大小。整个算法时间复杂度即为二分查找的时间复杂度 $O(\log n)$。
 * 空间复杂度： $O(1)$ 。我们只需要常数级别的空间存放变量。
-        
+
 ### [Search a 2D Matrix II](https://leetcode.cn/problems/search-a-2d-matrix-ii/)
 
 python
+
 ```python
 class Solution:
     def searchMatrix(self, matrix: List[List[int]], target: int) -> bool:
@@ -342,6 +352,7 @@ class Solution:
 ```
 
 rust
+
 ```rust
 impl Solution {
     pub fn search_matrix(matrix: Vec<Vec<i32>>, target: i32) -> bool {
